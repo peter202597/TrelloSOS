@@ -1,5 +1,6 @@
 package com.sos.trellosos.domain.column;
 
+import com.sos.trellosos.domain.column.dto.ColumnRequestDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +19,9 @@ public class Column {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
-    private String columnname;
+    private String columnName;
 
+    public Column(ColumnRequestDto columnRequestDto) {
+        this.columnName = columnRequestDto.getColumnName();
+    }
 }
