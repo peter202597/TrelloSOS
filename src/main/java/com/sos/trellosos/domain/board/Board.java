@@ -1,5 +1,6 @@
 package com.sos.trellosos.domain.board;
 
+import com.sos.trellosos.domain.board.dto.BoardRequestDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,4 +23,9 @@ public class Board {
     private String backgroundColor;
     private String boardDescription;
 
+    public Board(BoardRequestDto boardRequestDto) {
+        this.boardName = boardRequestDto.getBoardName();
+        this.backgroundColor = boardRequestDto.getBackgroundColor();
+        this.boardDescription = boardRequestDto.getBoardDescription();
+    }
 }
