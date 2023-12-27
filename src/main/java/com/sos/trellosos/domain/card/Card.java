@@ -1,5 +1,6 @@
 package com.sos.trellosos.domain.card;
 
+import com.sos.trellosos.Timestamped;
 import com.sos.trellosos.domain.cardUser.CardUser;
 import com.sos.trellosos.domain.column.Column;
 import com.sos.trellosos.domain.comment.Comment;
@@ -27,7 +28,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Getter
 @DynamicInsert
 @DynamicUpdate
-public class Card {
+public class Card extends Timestamped {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
