@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode {
 
+    CARD_NOT_FOUND(HttpStatus.NOT_FOUND, "카드가 존재하지 않습니다."),
     USER_NOT_MATCHES(HttpStatus.UNAUTHORIZED, "board 생성자만 수정/삭제할 수 있습니다."),
     PASSWORD_NOT_MATCHES(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
     ALREADY_EXIST_USER(HttpStatus.CONFLICT,"중복된 닉네임 입니다."),
