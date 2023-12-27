@@ -1,8 +1,11 @@
 package com.sos.trellosos.domain.comment;
 
 import com.sos.trellosos.domain.card.Card;
+import com.sos.trellosos.domain.card.CardRepository;
 import com.sos.trellosos.domain.user.User;
 import java.time.LocalDateTime;
+
+import com.sos.trellosos.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +19,9 @@ public class CommentService {
 
     public Comment addCommentToCard(Long cardId, Long userId, String text) {
         Card card = cardRepository.findById(cardId)
-            .orElseThrow(() -> new ResourceNotFoundException("Card not found with id " + cardId));
+            .orElseThrow(() -> new RuntimeException("Card not found with id " + cardId));
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
+            .orElseThrow(() -> new RuntimeException("User not found with id " + userId));
 
         Comment comment = Comment.builder()
             .text(text)

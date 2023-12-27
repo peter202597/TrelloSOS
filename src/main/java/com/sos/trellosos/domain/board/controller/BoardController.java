@@ -27,12 +27,12 @@ public class BoardController {
     }
 
     @GetMapping("/{boardId}")
-    public List<Board> getBoards(@PathVariable Long boardId){
-        return boardService.getBoards();
+    public BoardResponseDto getBoard(@PathVariable Long boardId){
+        return boardService.getBoard(boardId);
     }
 
     @PatchMapping("/{boardId}")
-    public BoardResponseDto getBoard(
+    public BoardResponseDto updateBoard(
             @PathVariable Long boardId,
             @RequestBody BoardRequestDto boardRequestDto){
         return boardService.updateBoard(boardId,boardRequestDto);
