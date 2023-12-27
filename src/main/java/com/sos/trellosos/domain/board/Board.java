@@ -22,8 +22,8 @@ public class Board extends Timestamped {
     private String boardName;
     private String backgroundColor;
     private String boardDescription;
-    @OneToMany
-    private List<BoardUsers> boardUsers=new ArrayList<>();
+    @OneToMany(mappedBy = "board")
+    private List<BoardUsers> boardUsers = new ArrayList<>();
 
     //보드 생성
     public Board(BoardRequestDto boardRequestDto) {

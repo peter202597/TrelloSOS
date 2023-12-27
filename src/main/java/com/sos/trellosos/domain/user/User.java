@@ -21,6 +21,6 @@ public class User {
     private String password;
     private String email;
 
-    @OneToMany
-    private List<BoardUsers> boardUsers=new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<BoardUsers> boardUsers = new ArrayList<>();
 }
