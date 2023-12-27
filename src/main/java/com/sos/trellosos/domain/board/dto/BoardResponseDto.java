@@ -1,7 +1,9 @@
 package com.sos.trellosos.domain.board.dto;
 
 import com.sos.trellosos.domain.board.Board;
+import lombok.Getter;
 
+@Getter
 public class BoardResponseDto {
     private String boardName;
     private String backgroundColor;

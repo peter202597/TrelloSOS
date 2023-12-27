@@ -6,12 +6,9 @@ import com.sos.trellosos.domain.board.dto.BoardRequestDto;
 import com.sos.trellosos.domain.board.dto.BoardResponseDto;
 import com.sos.trellosos.domain.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static org.hibernate.query.sqm.tree.SqmNode.log;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,7 +17,7 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping("/create")
-    public CommonResponseDto createBoard(BoardRequestDto boardRequestDto){//@AuthenticationPrincipal UserDetailsImpl userDetails
+    public CommonResponseDto createBoard(@RequestBody BoardRequestDto boardRequestDto){//@AuthenticationPrincipal UserDetailsImpl userDetails
         return boardService.createBoard(boardRequestDto);
     }
 
@@ -46,5 +43,10 @@ public class BoardController {
             @PathVariable Long boardId
             ){
         return boardService.deleteBoard(boardId);
+    }
+
+    @PostMapping("/invite")
+    public CommonResponseDto inviteUser(@RequestBody String userId){
+        return boardService.inviteUser(userId);
     }
 }

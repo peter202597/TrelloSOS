@@ -16,13 +16,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
-
+    //private final UserRepository userRepository;
     //보드 생성
+    @Transactional
     public CommonResponseDto createBoard(BoardRequestDto boardRequestDto) {
-
         Board board = new Board(boardRequestDto);
         boardRepository.save(board);
-
         return new CommonResponseDto("보드 생성 성공", HttpStatus.CREATED.value());
     }
 
@@ -30,15 +29,18 @@ public class BoardService {
     public List<Board> getBoards() {
         return boardRepository.findAll();
     }
+
     //보드 수정
     @Transactional
     public BoardResponseDto updateBoard(Long boardId, BoardRequestDto boardRequestDto) {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 보드 입니다.")
         );
-        board = new Board(boardRequestDto);
+        board.updateBoard(boardRequestDto);
+
         return new BoardResponseDto(board);
     }
+
     //보드 삭제
     @Transactional
     public CommonResponseDto deleteBoard(Long boardId) {
@@ -46,7 +48,11 @@ public class BoardService {
                 () -> new IllegalArgumentException("존재하지 않는 보드 입니다.")
         );
         boardRepository.deleteById(boardId);
-        return new CommonResponseDto(boardId + "번 보드 삭제 성공",HttpStatus.OK.value());
+        return new CommonResponseDto(boardId + "번 보드 삭제 성공", HttpStatus.OK.value());
     }
 
+    public CommonResponseDto inviteUser(String userId) {
+
+        return new CommonResponseDto(userId + "유저 등록 성공",HttpStatus.OK.value());
+    }
 }
