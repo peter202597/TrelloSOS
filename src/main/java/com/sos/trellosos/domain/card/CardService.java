@@ -4,6 +4,10 @@ import com.sos.trellosos.exception.CustomException;
 import com.sos.trellosos.exception.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,6 +35,27 @@ public class CardService {
     Card savedCard = cardRepository.save(card);
 
     return new CardResponseDto(savedCard);
+  }
+
+  public Page<CardResponseDto> getCardPage(
+      String boardName,
+      String columnName,
+      int page, int size, String sortBy, boolean isAsc) {
+    //    Board board = boardRepository.findByBoardName(boardName).orElseThrow(
+//        () -> throw new CustomException(ErrorCode.BOARD_NOT_FOUND)
+//    );
+//
+//    Column column = columnRepository.findByColumnName(columnName).orElseThrow(
+//        () -> throw new CustomException(ErrorCode.COLUMN_NOT_FOUND)
+//    );
+
+    Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+    Sort sort = Sort.by(direction, sortBy);
+    Pageable pageable = PageRequest.of(page, size, sort);
+
+    Page<Card> cardList = cardRepository.findAll(pageable);
+
+    return cardList.map(CardResponseDto::new);
   }
 
   @Transactional
@@ -68,4 +93,5 @@ public class CardService {
 
     cardRepository.delete(card);
   }
+
 }

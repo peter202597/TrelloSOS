@@ -3,14 +3,17 @@ package com.sos.trellosos.domain.card;
 
 import com.sos.trellosos.CommonResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -29,6 +32,21 @@ public class CardController {
     CardResponseDto responseDto = cardService.addCard(boardId, columnId, requestDto);
 
     return ResponseEntity.status(HttpStatus.CREATED.value()).body(responseDto);
+  }
+
+  @GetMapping("/{boardName}/{columnName}/cards")
+  public ResponseEntity<Page<CardResponseDto>> getCardPage(
+      @PathVariable String boardName,
+      @PathVariable String columnName,
+      @RequestParam("page") int page,
+      @RequestParam("size") int size,
+      @RequestParam("sortBy") String sortBy,
+      @RequestParam("isAsc") boolean isAsc
+  ) {
+    Page<CardResponseDto> cardList = cardService.getCardPage(boardName, columnName, page-1, size,
+        sortBy, isAsc);
+
+    return ResponseEntity.status(HttpStatus.OK.value()).body(cardList);
   }
 
   @PutMapping("/{boardName}/{columnName}/{cardName}")
@@ -56,4 +74,6 @@ public class CardController {
         .status(HttpStatus.OK.value())
         .body(new CommonResponseDto(cardName + "카드가 삭제되었습니다.", HttpStatus.OK.value()));
   }
+
+
 }
