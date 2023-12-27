@@ -1,5 +1,6 @@
 package com.sos.trellosos.domain.user;
 
+import com.sos.trellosos.domain.security.UserDetailsImpl;
 import com.sos.trellosos.exception.CustomException;
 import com.sos.trellosos.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    // 회원가입
     public void signup(UserRequestDto userRequestDto) {
         String username = userRequestDto.getUsername();
         String password = userRequestDto.getPassword();
@@ -38,6 +40,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    // 로그인
     public void login(UserRequestDto userRequestDto) {
         String username = userRequestDto.getUsername();
         String password = userRequestDto.getPassword();
@@ -48,5 +51,13 @@ public class UserService {
         if(!passwordEncoder.matches(password, user.getPassword())) {
             throw new CustomException(ErrorCode.PASSWORD_NOT_MATCHES);
         }
+    }
+
+    // 회원탈퇴
+    public void deleteUser(UserDetailsImpl userDetails) {
+        User user = userRepository.findById(userDetails.getUser().getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        userRepository.delete(user);
     }
 }

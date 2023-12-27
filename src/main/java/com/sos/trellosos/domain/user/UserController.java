@@ -2,15 +2,16 @@ package com.sos.trellosos.domain.user;
 
 import com.sos.trellosos.CommonResponseDto;
 import com.sos.trellosos.domain.jwt.JwtUtil;
+import com.sos.trellosos.domain.security.UserDetailsImpl;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.RejectedExecutionException;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class UserController {
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
+    // 회원가입
     @PostMapping("/signup")
     public ResponseEntity<Object> signup(@Valid @RequestBody UserRequestDto userRequestDto) {
         userService.signup(userRequestDto);
@@ -28,6 +30,7 @@ public class UserController {
                 .body(new CommonResponseDto("회원가입 성공", HttpStatus.CREATED.value()));
     }
 
+    // 로그인
     @PostMapping("/login")
     public ResponseEntity<CommonResponseDto> login(@RequestBody UserRequestDto userRequestDto, HttpServletResponse response) {
         userService.login(userRequestDto);
@@ -36,5 +39,14 @@ public class UserController {
 
         return ResponseEntity.ok()
                 .body(new CommonResponseDto("로그인 성공", HttpStatus.OK.value()));
+    }
+
+    // 회원탈퇴
+    @DeleteMapping
+    public ResponseEntity<CommonResponseDto> deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        userService.deleteUser(userDetails);
+
+        return ResponseEntity.ok()
+                .body(new CommonResponseDto("회원탈퇴 성공", HttpStatus.OK.value()));
     }
 }
