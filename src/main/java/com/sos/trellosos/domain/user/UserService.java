@@ -34,7 +34,19 @@ public class UserService {
             throw new CustomException(ErrorCode.ID_PW_SAME);
         }
 
-        User user = new User(username, password, email);
+        User user = new User(username, encodedPassword, email);
         userRepository.save(user);
+    }
+
+    public void login(UserRequestDto userRequestDto) {
+        String username = userRequestDto.getUsername();
+        String password = userRequestDto.getPassword();
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_MATCHES2));
+
+        if(!passwordEncoder.matches(password, user.getPassword())) {
+            throw new CustomException(ErrorCode.PASSWORD_NOT_MATCHES);
+        }
     }
 }
