@@ -1,14 +1,13 @@
 package com.sos.trellosos.domain.column.controller;
 
-import com.sos.trellosos.domain.column.dto.ColumnCreateRequestDto;
-import com.sos.trellosos.domain.column.dto.ColumnCreateResponseDto;
+import com.sos.trellosos.domain.column.dto.ColumnRequestDto;
+import com.sos.trellosos.domain.column.dto.ColumnResponseDto;
 import com.sos.trellosos.domain.column.service.ColumnService;
-import jakarta.validation.Valid;
+import com.sos.trellosos.global.dto.CommonResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,7 +16,27 @@ public class ColumnController {
 
     private final ColumnService columnService;
 
-    // 컬럼 작성
-    // @return 생성한 게시글 세부 정보를 반환함
-    public createColumn() {}
+    //컬럼 생성
+    @PostMapping("/create")
+    public CommonResponseDto createColumn(@RequestBody ColumnRequestDto columnRequestDto){
+        return columnService.createColumn(columnRequestDto);
     }
+
+    //컬럼 수정
+    @PatchMapping("/{columnId}")
+    public ColumnResponseDto updateColumn(
+            @PathVariable Long columnId,
+            @RequestBody ColumnRequestDto columnRequestDto){
+        return columnService.updateColumn(columnId,columnRequestDto);
+    }
+
+    //컬럼 삭제
+    @DeleteMapping ("/{columnId}")
+    public CommonResponseDto deleteColumn(
+            @PathVariable Long columnId
+    ){
+        return columnService.deleteColumn(columnId);
+    }
+
+    //컬럼 번호 이동
+}

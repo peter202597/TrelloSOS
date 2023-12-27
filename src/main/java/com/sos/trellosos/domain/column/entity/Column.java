@@ -2,9 +2,10 @@ package com.sos.trellosos.domain.column.entity;
 
 import com.sos.trellosos.global.entity.Timestamped;
 import com.sos.trellosos.domain.board.Board;
-import com.sos.trellosos.domain.column.dto.ColumnCreateRequestDto;
+import com.sos.trellosos.domain.column.dto.ColumnRequestDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,14 +19,22 @@ public class Column extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String columnName;
+    @jakarta.persistence.Column(unique = true)
     private Integer sequence;
+    private String columnName;
 
     @ManyToOne
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
-    public Column(ColumnCreateRequestDto columnCreateRequestDto) {
-        this.columnName = columnCreateRequestDto.getColumnName();
+    @Builder
+    public Column(ColumnRequestDto columnRequestDto) {
+        this.columnName = columnRequestDto.getColumnName();
+    }
+
+    //컬럼 수정
+    public void updateColumn(ColumnRequestDto columnRequestDto) {
+        this.sequence = columnRequestDto.getColumnSequence();
+        this.columnName = columnRequestDto.getColumnName();
     }
 }
