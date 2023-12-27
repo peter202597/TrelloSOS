@@ -1,4 +1,4 @@
-package com.sos.trellosos;
+package com.sos.trellosos.global.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

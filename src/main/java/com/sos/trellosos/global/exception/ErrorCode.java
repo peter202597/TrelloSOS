@@ -1,4 +1,4 @@
-package com.sos.trellosos.exception;
+package com.sos.trellosos.global.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
