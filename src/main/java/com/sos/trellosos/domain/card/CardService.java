@@ -51,4 +51,21 @@ public class CardService {
 
     return new CardResponseDto(card);
   }
+
+  @Transactional
+  public void deleteCard(String boardName, String columnName, String cardName) {
+    //    Board board = boardRepository.findByBoardName(boardName).orElseThrow(
+//        () -> throw new CustomException(ErrorCode.BOARD_NOT_FOUND)
+//    );
+//
+//    Column column = columnRepository.findByColumnName(columnName).orElseThrow(
+//        () -> throw new CustomException(ErrorCode.COLUMN_NOT_FOUND)
+//    );
+
+    Card card = cardRepository.findByCardName(cardName).orElseThrow(
+        () -> new CustomException(ErrorCode.CARD_NOT_FOUND)
+    );
+
+    cardRepository.delete(card);
+  }
 }
