@@ -33,6 +33,7 @@ public class Card {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @jakarta.persistence.Column(unique = true)
   private String cardName;
 
   private String cardDescription;
@@ -76,7 +77,15 @@ public class Card {
   public void setColumn(Column column) {
     this.column = column;
   }
+
+
   /**
    * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
    */
+  public void update(CardRequestDto requestDto) {
+    this.cardName = requestDto.getCardName();
+    this.cardColor = requestDto.getCardColor();
+    this.cardDescription = requestDto.getCardDescription();
+
+  }
 }
