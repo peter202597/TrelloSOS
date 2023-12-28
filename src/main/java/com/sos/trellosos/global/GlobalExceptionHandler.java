@@ -1,5 +1,7 @@
-package com.sos.trellosos.exception;
+package com.sos.trellosos.global;
 
+import com.sos.trellosos.global.exception.CustomException;
+import com.sos.trellosos.global.exception.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

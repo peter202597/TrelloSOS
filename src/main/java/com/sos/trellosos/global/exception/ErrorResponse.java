@@ -1,4 +1,4 @@
-package com.sos.trellosos.exception;
+package com.sos.trellosos.global.exception;
 
 import java.time.LocalDateTime;
 import lombok.Getter;

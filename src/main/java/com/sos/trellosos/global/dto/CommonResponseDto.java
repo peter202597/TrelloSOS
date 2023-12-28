@@ -1,12 +1,12 @@
-package com.sos.trellosos;
+package com.sos.trellosos.global.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class CommonResponseDto {
 
     private String msg;

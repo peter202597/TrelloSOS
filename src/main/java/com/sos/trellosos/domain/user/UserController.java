@@ -1,6 +1,6 @@
 package com.sos.trellosos.domain.user;
 
-import com.sos.trellosos.CommonResponseDto;
+import com.sos.trellosos.global.dto.CommonResponseDto;
 import com.sos.trellosos.domain.jwt.JwtUtil;
 import com.sos.trellosos.domain.security.UserDetailsImpl;
 import jakarta.servlet.http.HttpServletResponse;
