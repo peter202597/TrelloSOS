@@ -1,6 +1,6 @@
 package com.sos.trellosos.domain.board;
 
-import com.sos.trellosos.Timestamped;
+import com.sos.trellosos.global.entity.Timestamped;
 import com.sos.trellosos.domain.board.dto.BoardRequestDto;
 import com.sos.trellosos.domain.user.User;
 import jakarta.persistence.*;
