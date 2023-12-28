@@ -2,7 +2,7 @@ package com.sos.trellosos.domain.card;
 
 import com.sos.trellosos.global.entity.Timestamped;
 import com.sos.trellosos.domain.cardUser.CardUser;
-import com.sos.trellosos.domain.column.Column;
+import com.sos.trellosos.domain.column.entity.Column;
 import com.sos.trellosos.domain.comment.Comment;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
