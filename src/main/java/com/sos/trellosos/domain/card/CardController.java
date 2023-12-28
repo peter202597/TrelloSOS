@@ -1,7 +1,7 @@
 package com.sos.trellosos.domain.card;
 
 
-import com.sos.trellosos.CommonResponseDto;
+import com.sos.trellosos.global.dto.CommonResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
