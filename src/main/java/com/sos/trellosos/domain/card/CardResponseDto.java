@@ -13,12 +13,16 @@ public class CardResponseDto {
   String cardName;
   String cardColor;
   String cardDescription;
+  Integer order;
   LocalDateTime dueDate;
+  String worker;
 
   public CardResponseDto(Card card) {
     this.cardName = card.getCardName();
     this.cardColor = card.getCardColor();
     this.cardDescription = card.getCardDescription();
+    this.order = card.getOrder();
     this.dueDate = card.getDueDate();
   }
+
 }
