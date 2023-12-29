@@ -2,6 +2,7 @@ package com.sos.trellosos.domain.column.controller;
 
 import com.sos.trellosos.domain.column.dto.ColumnRequestDto;
 import com.sos.trellosos.domain.column.dto.ColumnResponseDto;
+import com.sos.trellosos.domain.column.dto.SequenceChangeRequestDto;
 import com.sos.trellosos.domain.column.service.ColumnService;
 import com.sos.trellosos.global.dto.CommonResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -11,14 +12,15 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/boards/{board_id}/columns")
+@RequestMapping("/api")
 public class ColumnController {
 
     private final ColumnService columnService;
 
     //컬럼 생성
-    @PostMapping("/create")
-    public CommonResponseDto createColumn(@RequestBody ColumnRequestDto columnRequestDto){
+    @PostMapping("/columns")
+    public CommonResponseDto createColumn(
+            @RequestBody ColumnRequestDto columnRequestDto){
         return columnService.createColumn(columnRequestDto);
     }
 
@@ -33,10 +35,15 @@ public class ColumnController {
     //컬럼 삭제
     @DeleteMapping ("/{columnId}")
     public CommonResponseDto deleteColumn(
-            @PathVariable Long columnId
-    ){
+            @PathVariable Long columnId){
         return columnService.deleteColumn(columnId);
     }
 
     //컬럼 번호 이동
+//    @PutMapping("/{columnId}")
+//    public ColumnResponseDto updateColumnSequence(
+//            @PathVariable Long columnId,
+//            @RequestBody SequenceChangeRequestDto request){
+//        return columnService.updateColumnSequence(columnId, request);
+//    }
 }

@@ -8,7 +8,8 @@ import lombok.Getter;
 public class ColumnRequestDto {
 
     @NotBlank
-    private Integer columnSequence;
+    private Long columnSequence;
+    @NotBlank
     private String columnName;
 
 }
