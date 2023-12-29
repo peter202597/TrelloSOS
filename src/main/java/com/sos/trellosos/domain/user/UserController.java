@@ -1,8 +1,8 @@
 package com.sos.trellosos.domain.user;
 
-import com.sos.trellosos.CommonResponseDto;
 import com.sos.trellosos.domain.jwt.JwtUtil;
 import com.sos.trellosos.domain.security.UserDetailsImpl;
+import com.sos.trellosos.global.dto.CommonResponseDto;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

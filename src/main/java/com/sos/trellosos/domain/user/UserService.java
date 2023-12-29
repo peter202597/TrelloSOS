@@ -1,8 +1,8 @@
 package com.sos.trellosos.domain.user;
 
 import com.sos.trellosos.domain.security.UserDetailsImpl;
-import com.sos.trellosos.exception.CustomException;
-import com.sos.trellosos.exception.ErrorCode;
+import com.sos.trellosos.global.exception.CustomException;
+import com.sos.trellosos.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
