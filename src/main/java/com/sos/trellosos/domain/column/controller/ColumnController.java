@@ -2,12 +2,10 @@ package com.sos.trellosos.domain.column.controller;
 
 import com.sos.trellosos.domain.column.dto.ColumnRequestDto;
 import com.sos.trellosos.domain.column.dto.ColumnResponseDto;
-import com.sos.trellosos.domain.column.dto.SequenceChangeRequestDto;
+//import com.sos.trellosos.domain.column.dto.SequenceChangeRequestDto;
 import com.sos.trellosos.domain.column.service.ColumnService;
 import com.sos.trellosos.global.dto.CommonResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,7 +23,7 @@ public class ColumnController {
     }
 
     //컬럼 수정
-    @PatchMapping("/{columnId}")
+    @PatchMapping("/columns/{columnId}")
     public ColumnResponseDto updateColumn(
             @PathVariable Long columnId,
             @RequestBody ColumnRequestDto columnRequestDto){
@@ -33,14 +31,14 @@ public class ColumnController {
     }
 
     //컬럼 삭제
-    @DeleteMapping ("/{columnId}")
+    @DeleteMapping ("/columns/{columnId}")
     public CommonResponseDto deleteColumn(
             @PathVariable Long columnId){
         return columnService.deleteColumn(columnId);
     }
 
     //컬럼 번호 이동
-//    @PutMapping("/{columnId}")
+//    @PutMapping("/columns/{columnId}")
 //    public ColumnResponseDto updateColumnSequence(
 //            @PathVariable Long columnId,
 //            @RequestBody SequenceChangeRequestDto request){
