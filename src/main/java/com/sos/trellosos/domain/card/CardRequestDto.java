@@ -10,9 +10,11 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CardRequestDto {
 
+  private Long columnId;
   private String cardName;
   private String cardColor;
   private String cardDescription;
-//  private String executor;
+  private Integer order;
+  private Long userId;
 
 }
