@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 public class ColumnResponseDto extends CommonResponseDto {
 
     private Long id;
-    private Long sequence;
+    private Long columnSequence;
     private String columnName;
 
     public ColumnResponseDto(Columns columns) {
         this.id = columns.getId();
-        this.sequence = columns.getSequence();
+        this.columnSequence = columns.getSequence();
         this.columnName = columns.getColumnName();
     }
 }
