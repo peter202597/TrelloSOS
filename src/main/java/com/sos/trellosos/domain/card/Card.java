@@ -2,7 +2,7 @@ package com.sos.trellosos.domain.card;
 
 import com.sos.trellosos.global.entity.Timestamped;
 import com.sos.trellosos.domain.cardUser.CardUser;
-import com.sos.trellosos.domain.column.entity.Column;
+import com.sos.trellosos.domain.column.entity.Columns;
 import com.sos.trellosos.domain.comment.Comment;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -64,7 +64,7 @@ public class Card extends Timestamped {
    */
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "column_id")
-  private Column column;
+  private Columns columns;
 
   @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<Comment> comments = new LinkedHashSet<>();
@@ -75,8 +75,8 @@ public class Card extends Timestamped {
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
    */
-  public void setColumn(Column column) {
-    this.column = column;
+  public void setColumns(Columns columns) {
+    this.columns = columns;
   }
 
 
