@@ -24,14 +24,6 @@ public class Columns extends Timestamped {
     @Column(unique = true)
     private String columnName;
 
-    public void sequenceUp(){
-        this.sequence = Math.max(0, this.sequence - 1);
-    }
-
-    public void sequenceDown(){
-        this.sequence = this.sequence + 1;
-    }
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

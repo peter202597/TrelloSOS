@@ -15,7 +15,7 @@ public enum ErrorCode {
     ALREADY_EXIST_USER(HttpStatus.CONFLICT,"중복된 닉네임 입니다."),
     ID_PW_SAME(HttpStatus.BAD_REQUEST, "비밀번호에 Username과 같은 값이 있으면 안됩니다."),
     FORM_NOT_EMAIL(HttpStatus.BAD_REQUEST, "이메일 형식이 잘못됐습니다."),
-    POST_NOT_FOUND(HttpStatus.NOT_FOUND, "게시글이 존재하지 않습니다."),
+    BOARD_NOT_FOUND(HttpStatus.NOT_FOUND, "보드가 존재하지 않습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자가 존재하지 않습니다."),
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."),
     INDEX_NOT_FOUND(HttpStatus.NOT_FOUND, "인덱스가 존재하지 않습니다."),

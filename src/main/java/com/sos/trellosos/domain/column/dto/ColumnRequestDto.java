@@ -6,7 +6,10 @@ import lombok.Getter;
 //컬럼 생성 요청 DTO
 @Getter
 public class ColumnRequestDto {
-
+    @NotBlank
+    private Long boardId;
+    @NotBlank
+    private Long userId;
     @NotBlank
     private Long columnSequence;
     @NotBlank
