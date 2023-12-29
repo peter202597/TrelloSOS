@@ -23,57 +23,57 @@ public class CardController {
 
   private final CardService cardService;
 
-  @PostMapping("/boards/{boardId}/columns/{columnId}/cards")
-  public ResponseEntity<CardResponseDto> addCard(
-      @PathVariable Long boardId,
-      @PathVariable Long columnId,
-      @RequestBody CardRequestDto requestDto
-  ) {
-    CardResponseDto responseDto = cardService.addCard(boardId, columnId, requestDto);
+  @PostMapping("/cards")
+  public ResponseEntity<CardResponseDto> createCard(@RequestBody CardRequestDto requestDto) {
+    CardResponseDto responseDto = cardService.createCard(requestDto);
 
-    return ResponseEntity.status(HttpStatus.CREATED.value()).body(responseDto);
+    return ResponseEntity
+        .status(HttpStatus.CREATED.value())
+        .body(responseDto);
   }
 
-  @GetMapping("/{boardName}/{columnName}/cards")
+  @GetMapping("/cards/{cardId}")
+  public ResponseEntity<CardResponseDto> getCard(@PathVariable Long cardId) {
+    CardResponseDto responseDto = cardService.getCard(cardId);
+
+    return ResponseEntity
+        .status(HttpStatus.OK.value())
+        .body(responseDto);
+  }
+
+  @GetMapping("/cards")
   public ResponseEntity<Page<CardResponseDto>> getCardPage(
-      @PathVariable String boardName,
-      @PathVariable String columnName,
       @RequestParam("page") int page,
       @RequestParam("size") int size,
       @RequestParam("sortBy") String sortBy,
       @RequestParam("isAsc") boolean isAsc
   ) {
-    Page<CardResponseDto> cardList = cardService.getCardPage(boardName, columnName, page-1, size,
-        sortBy, isAsc);
-
-    return ResponseEntity.status(HttpStatus.OK.value()).body(cardList);
-  }
-
-  @PutMapping("/{boardName}/{columnName}/{cardName}")
-  public ResponseEntity<CardResponseDto> updateCard(
-      @PathVariable String boardName,
-      @PathVariable String columnName,
-      @PathVariable String cardName,
-      @RequestBody CardRequestDto requestDto
-  ) {
-    CardResponseDto responseDto = cardService.updateCard(boardName, columnName, cardName,
-        requestDto);
-
-    return ResponseEntity.status(HttpStatus.OK.value()).body(responseDto);
-  }
-
-  @DeleteMapping("/{boardName}/{columnName}/{cardName}")
-  public ResponseEntity<CommonResponseDto> deleteCard(
-      @PathVariable String boardName,
-      @PathVariable String columnName,
-      @PathVariable String cardName
-  ) {
-    cardService.deleteCard(boardName, columnName, cardName);
+    Page<CardResponseDto> cardList = cardService.getCardPage(page - 1, size, sortBy, isAsc);
 
     return ResponseEntity
         .status(HttpStatus.OK.value())
-        .body(new CommonResponseDto(cardName + "카드가 삭제되었습니다.", HttpStatus.OK.value()));
+        .body(cardList);
+  }
+
+  @PutMapping("cards/{cardId}")
+  public ResponseEntity<CardResponseDto> updateCard(
+      @PathVariable Long cardId,
+      @RequestBody CardRequestDto requestDto
+  ) {
+    CardResponseDto responseDto = cardService.updateCard(cardId, requestDto);
+
+    return ResponseEntity
+        .status(HttpStatus.OK.value())
+        .body(responseDto);
   }
 
 
+  @DeleteMapping("/cards/{cardId}")
+  public ResponseEntity<CommonResponseDto> deleteCard(@PathVariable Long cardId) {
+    cardService.deleteCard(cardId);
+
+    return ResponseEntity
+        .status(HttpStatus.OK.value())
+        .body(new CommonResponseDto("카드가 삭제되었습니다.", HttpStatus.OK.value()));
+  }
 }

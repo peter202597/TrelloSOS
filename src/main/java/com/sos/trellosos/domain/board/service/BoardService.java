@@ -1,10 +1,11 @@
 package com.sos.trellosos.domain.board.service;
 
-import com.sos.trellosos.global.dto.CommonResponseDto;
+
 import com.sos.trellosos.domain.board.Board;
 import com.sos.trellosos.domain.board.dto.BoardRequestDto;
 import com.sos.trellosos.domain.board.dto.BoardResponseDto;
 import com.sos.trellosos.domain.board.repository.BoardRepository;
+import com.sos.trellosos.global.dto.CommonResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
