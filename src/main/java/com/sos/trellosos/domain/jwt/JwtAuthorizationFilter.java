@@ -1,9 +1,10 @@
 package com.sos.trellosos.domain.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sos.trellosos.CommonResponseDto;
+
 import com.sos.trellosos.domain.security.UserDetailsImpl;
 import com.sos.trellosos.domain.security.UserDetailsService;
+import com.sos.trellosos.global.dto.CommonResponseDto;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

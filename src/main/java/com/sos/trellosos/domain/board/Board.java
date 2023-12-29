@@ -1,14 +1,18 @@
 package com.sos.trellosos.domain.board;
 
-import com.sos.trellosos.Timestamped;
-import com.sos.trellosos.domain.board.dto.BoardRequestDto;
-import com.sos.trellosos.domain.user.User;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
+import com.sos.trellosos.domain.board.dto.BoardRequestDto;
+import com.sos.trellosos.global.entity.Timestamped;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
