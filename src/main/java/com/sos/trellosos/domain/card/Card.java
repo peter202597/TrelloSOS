@@ -1,6 +1,7 @@
 package com.sos.trellosos.domain.card;
 
 
+
 import com.sos.trellosos.global.entity.Timestamped;
 import com.sos.trellosos.domain.column.entity.Columns;
 import com.sos.trellosos.domain.comment.Comment;
@@ -12,7 +13,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
@@ -35,12 +35,12 @@ public class Card extends Timestamped {
 
   private String cardColor;
 
-  @Column(name = "order_number")
-  private Integer order;
+
+  private Integer sequence;
+
 
   private LocalDateTime dueDate;
 
-  @Builder
   public Card(CardRequestDto requestDto) {
     this.cardName = requestDto.getCardName();
     this.cardDescription = requestDto.getCardDescription();
@@ -76,6 +76,9 @@ public class Card extends Timestamped {
     this.columns = columns;
   }
 
+  public void setSequence(Integer number) {
+    this.sequence = number;
+  }
 
   /**
    * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)

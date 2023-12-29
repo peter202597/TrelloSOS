@@ -1,15 +1,17 @@
 package com.sos.trellosos.domain.card;
 
 
+
+import com.sos.trellosos.domain.column.entity.Columns;
 import com.sos.trellosos.domain.column.repository.ColumnRepository;
 import com.sos.trellosos.domain.user.User;
 import com.sos.trellosos.domain.user.UserRepository;
 import com.sos.trellosos.domain.worker.Worker;
 import com.sos.trellosos.domain.worker.WorkerRepository;
-import com.sos.trellosos.domain.column.entity.Columns;
 import com.sos.trellosos.global.exception.CustomException;
 import com.sos.trellosos.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,13 +30,17 @@ public class CardService {
 
 
   public CardResponseDto createCard(CardRequestDto requestDto) {
+
     Columns columns = columnRepository.findById(requestDto.getColumnId()).orElseThrow(
         () -> new CustomException(ErrorCode.COLUMN_NOT_FOUND)
     );
+    Integer count = cardRepository.countByColumnsId(requestDto.getColumnId()) + 1;
 
     Card card = new Card(requestDto);
 
-    card.setColumns(columns);
+
+    card.setColumns(column);
+    card.setSequence(count);
 
     Card savedCard = cardRepository.save(card);
 
@@ -92,4 +98,22 @@ public class CardService {
     return card;
   }
 
+  @Transactional
+  public List<CardResponseDto> changeSequence(Long cardId, ChangeSequenceRequestDto requestDto) {
+    Integer newSequence = requestDto.getNewSequence();
+
+    Card card = findCard(cardId);
+    Integer currentSequence = card.getSequence();
+
+    if (currentSequence < newSequence) {
+      cardRepository.decrementSequenceBetween(currentSequence + 1, newSequence);
+    } else {
+      cardRepository.incrementSequenceBetween(newSequence, currentSequence - 1);
+    }
+    card.setSequence(newSequence);
+    cardRepository.save(card);
+
+    return cardRepository.findAllByOrderBySequenceAsc().stream().map(CardResponseDto::new)
+        .toList();
+  }
 }
