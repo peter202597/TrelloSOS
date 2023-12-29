@@ -1,6 +1,6 @@
 package com.sos.trellosos.domain.board.controller;
 
-import com.sos.trellosos.CommonResponseDto;
+import com.sos.trellosos.global.dto.CommonResponseDto;
 import com.sos.trellosos.domain.board.Board;
 import com.sos.trellosos.domain.board.dto.BoardRequestDto;
 import com.sos.trellosos.domain.board.dto.BoardResponseDto;

@@ -1,4 +1,4 @@
-package com.sos.trellosos.exception;
+package com.sos.trellosos.global.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
-
+    COLUMN_NOT_FOUND(HttpStatus.NOT_FOUND,"컬럼이 존재하지 않습니다"),
     CARD_NOT_FOUND(HttpStatus.NOT_FOUND, "카드가 존재하지 않습니다."),
     USER_NOT_MATCHES(HttpStatus.UNAUTHORIZED, "board 생성자만 수정/삭제할 수 있습니다."),
     USER_NOT_MATCHES2(HttpStatus.UNAUTHORIZED, "아이디가 일치하지 않습니다."),
