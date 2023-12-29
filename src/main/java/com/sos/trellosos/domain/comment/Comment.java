@@ -1,5 +1,6 @@
 package com.sos.trellosos.domain.comment;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sos.trellosos.domain.card.Card;
 import com.sos.trellosos.domain.user.User;
 import jakarta.persistence.Entity;
@@ -22,6 +23,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 @Table(name = "comments")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Comment {
 
     @Id
