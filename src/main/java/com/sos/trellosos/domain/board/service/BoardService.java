@@ -1,5 +1,6 @@
 package com.sos.trellosos.domain.board.service;
 
+
 import com.sos.trellosos.domain.board.Board;
 import com.sos.trellosos.domain.board.dto.BoardRequestDto;
 import com.sos.trellosos.domain.board.dto.BoardResponseDto;
