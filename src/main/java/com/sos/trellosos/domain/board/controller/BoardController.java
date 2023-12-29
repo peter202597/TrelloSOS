@@ -5,7 +5,9 @@ import com.sos.trellosos.domain.board.Board;
 import com.sos.trellosos.domain.board.dto.BoardRequestDto;
 import com.sos.trellosos.domain.board.dto.BoardResponseDto;
 import com.sos.trellosos.domain.board.service.BoardService;
+import com.sos.trellosos.domain.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,36 +19,47 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping("/create")
-    public CommonResponseDto createBoard(@RequestBody BoardRequestDto boardRequestDto){//@AuthenticationPrincipal UserDetailsImpl userDetails
-        return boardService.createBoard(boardRequestDto);
+    public CommonResponseDto createBoard(
+            @RequestBody BoardRequestDto boardRequestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return boardService.createBoard(boardRequestDto,userDetails);
     }
 
     @GetMapping("")
-    public List<Board> getBoards(){//@AuthenticationPrincipal UserDetailsImpl userDetails
-        return boardService.getBoards();
+    public List<Board> getBoards(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ){
+        return boardService.getBoards(userDetails);
     }
 
     @GetMapping("/{boardId}")
-    public BoardResponseDto getBoard(@PathVariable Long boardId){
-        return boardService.getBoard(boardId);
+    public BoardResponseDto getBoard(
+            @PathVariable Long boardId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return boardService.getBoard(boardId,userDetails);
     }
 
     @PatchMapping("/{boardId}")
     public BoardResponseDto updateBoard(
             @PathVariable Long boardId,
-            @RequestBody BoardRequestDto boardRequestDto){
-        return boardService.updateBoard(boardId,boardRequestDto);
+            @RequestBody BoardRequestDto boardRequestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return boardService.updateBoard(boardId,boardRequestDto,userDetails);
     }
 
     @DeleteMapping ("/{boardId}")
     public CommonResponseDto deleteBoard(
-            @PathVariable Long boardId
+            @PathVariable Long boardId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
             ){
-        return boardService.deleteBoard(boardId);
+        return boardService.deleteBoard(boardId,userDetails);
     }
 
-    @PostMapping("/invite")
-    public CommonResponseDto inviteUser(@RequestBody String userId){
-        return boardService.inviteUser(userId);
+    @PostMapping("/{boardId}/invite")
+    public CommonResponseDto inviteUser(
+            @PathVariable Long boardId,
+            @RequestBody Long userId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return boardService.inviteUser(boardId,userId,userDetails);
     }
 }

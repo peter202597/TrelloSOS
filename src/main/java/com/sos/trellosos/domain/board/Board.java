@@ -22,8 +22,8 @@ public class Board extends Timestamped {
     private String boardName;
     private String backgroundColor;
     private String boardDescription;
-    @OneToMany(mappedBy = "board")
-    private List<BoardUsers> boardUsers = new ArrayList<>();
+    @OneToMany(mappedBy = "board",cascade = CascadeType.ALL)
+    private List<BoardUser> boardUsers = new ArrayList<>();
 
     //보드 생성
     public Board(BoardRequestDto boardRequestDto) {
@@ -37,5 +37,9 @@ public class Board extends Timestamped {
         this.boardName = boardRequestDto.getBoardName();
         this.backgroundColor = boardRequestDto.getBackgroundColor();
         this.boardDescription = boardRequestDto.getBoardDescription();
+    }
+
+    public void inviteUser(User user) {
+        boardUsers.add(new BoardUser(this,user));
     }
 }
