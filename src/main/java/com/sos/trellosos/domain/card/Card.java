@@ -1,9 +1,11 @@
 package com.sos.trellosos.domain.card;
 
-import com.sos.trellosos.Timestamped;
-import com.sos.trellosos.domain.cardUser.CardUser;
-import com.sos.trellosos.domain.column.Column;
+
+import com.sos.trellosos.domain.column.entity.Column;
 import com.sos.trellosos.domain.comment.Comment;
+import com.sos.trellosos.domain.user.User;
+import com.sos.trellosos.domain.worker.Worker;
+import com.sos.trellosos.global.entity.Timestamped;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,8 +16,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,12 +36,14 @@ public class Card extends Timestamped {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @jakarta.persistence.Column(unique = true)
   private String cardName;
 
   private String cardDescription;
 
   private String cardColor;
+
+  @jakarta.persistence.Column(name = "order_number")
+  private Integer order;
 
   private LocalDateTime dueDate;
 
@@ -67,10 +71,10 @@ public class Card extends Timestamped {
   private Column column;
 
   @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<Comment> comments = new LinkedHashSet<>();
+  private List<Comment> comments = new ArrayList<>();
 
   @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<CardUser> cardUsers = new LinkedHashSet<>();
+  private List<Worker> workers = new ArrayList<>();
 
   /**
    * 연관관계 편의 메소드 - 반대쪽에는 연관관계 편의 메소드가 없도록 주의합니다.
@@ -83,10 +87,23 @@ public class Card extends Timestamped {
   /**
    * 서비스 메소드 - 외부에서 엔티티를 수정할 메소드를 정의합니다. (단일 책임을 가지도록 주의합니다.)
    */
-  public void update(CardRequestDto requestDto) {
-    this.cardName = requestDto.getCardName();
-    this.cardColor = requestDto.getCardColor();
-    this.cardDescription = requestDto.getCardDescription();
 
+  public Worker joinUser(User user) {
+    var worker = new Worker(user, this);
+    this.workers.add(worker);
+    user.getWorkers().add(worker);
+    return worker;
+  }
+
+  public void update(CardRequestDto requestDto) {
+    if (requestDto.getCardName() != null) {
+      this.cardName = requestDto.getCardName();
+    }
+    if (requestDto.getCardColor() != null) {
+      this.cardColor = requestDto.getCardColor();
+    }
+    if (requestDto.getCardDescription() != null) {
+      this.cardDescription = requestDto.getCardDescription();
+    }
   }
 }
