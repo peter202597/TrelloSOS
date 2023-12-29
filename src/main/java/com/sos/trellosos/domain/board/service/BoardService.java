@@ -1,10 +1,11 @@
 package com.sos.trellosos.domain.board.service;
 
-import com.sos.trellosos.CommonResponseDto;
+
 import com.sos.trellosos.domain.board.Board;
 import com.sos.trellosos.domain.board.dto.BoardRequestDto;
 import com.sos.trellosos.domain.board.dto.BoardResponseDto;
 import com.sos.trellosos.domain.board.repository.BoardRepository;
+import com.sos.trellosos.global.dto.CommonResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,13 @@ public class BoardService {
         return boardRepository.findAll();
     }
 
+    //보드 단건 조회
+    public BoardResponseDto getBoard(Long boardId) {
+        Board board = boardRepository.findById(boardId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 보드 입니다.")
+        );
+        return new BoardResponseDto(board);
+    }
     //보드 수정
     @Transactional
     public BoardResponseDto updateBoard(Long boardId, BoardRequestDto boardRequestDto) {
@@ -55,4 +63,6 @@ public class BoardService {
 
         return new CommonResponseDto(userId + "유저 등록 성공",HttpStatus.OK.value());
     }
+
+
 }

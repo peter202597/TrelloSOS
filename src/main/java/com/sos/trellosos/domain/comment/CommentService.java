@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import com.sos.trellosos.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +18,8 @@ public class CommentService {
     private final CardRepository cardRepository;
     private final UserRepository userRepository;
 
-    public Comment addCommentToCard(Long cardId, Long userId, String text) {
+    @Transactional
+    public CommentDto addCommentToCard(Long cardId, Long userId, String text) {
         Card card = cardRepository.findById(cardId)
             .orElseThrow(() -> new RuntimeException("Card not found with id " + cardId));
         User user = userRepository.findById(userId)
@@ -29,6 +31,7 @@ public class CommentService {
             .user(user)
             .createdAt(LocalDateTime.now())
             .build();
-        return commentRepository.save(comment);
+        Comment savedComment = commentRepository.save(comment);
+        return new CommentDto(savedComment.getId(), savedComment.getText(), savedComment.getUser().getId(), savedComment.getCreatedAt());
     }
 }

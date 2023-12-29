@@ -1,4 +1,4 @@
-package com.sos.trellosos;
+package com.sos.trellosos.global.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
