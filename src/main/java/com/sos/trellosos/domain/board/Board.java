@@ -2,6 +2,7 @@ package com.sos.trellosos.domain.board;
 
 
 
+import com.sos.trellosos.domain.user.User;
 import jakarta.persistence.*;
 
 

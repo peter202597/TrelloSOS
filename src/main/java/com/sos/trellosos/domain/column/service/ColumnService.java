@@ -13,6 +13,7 @@ import com.sos.trellosos.global.dto.CommonResponseDto;
 import com.sos.trellosos.global.exception.CustomException;
 import com.sos.trellosos.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,12 +66,9 @@ public class ColumnService {
 
     //컬럼 이동
 //    public List<ColumnResponseDto> updateColumnSequence(Long columnId, SequenceChangeRequestDto request) {
-//        Columns column = columnRepository.findById(columnId)
+//        Columns columns = columnRepository.findById(columnId)
 //                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 컬럼 입니다.")
 //        );
-//        // 1. 조회한 컬럼의 시퀀스넘버를 변경한다
-//        // 2.
-//
 //        // 요청에서 받은 컬럼의 이동 방향에 따라 순서를 변경합니다.
 //        if (request.getDirection().equals("up")) {
 //            // 순서를 올리는 로직

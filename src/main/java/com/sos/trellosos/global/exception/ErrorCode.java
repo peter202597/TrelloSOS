@@ -23,8 +23,7 @@ public enum ErrorCode {
     WRONG_TYPE_TOKEN(HttpStatus.BAD_REQUEST, "변조된 토큰입니다."),
     EXPIRED_TOKEN(HttpStatus.BAD_REQUEST, "만료된 토큰입니다."),
     UNSUPPORTED_TOKEN(HttpStatus.BAD_REQUEST, "변조된 토큰입니다."),
-    ACCESS_DENIED(HttpStatus.BAD_REQUEST, "권한이 없습니다."),
-    BOARD_NOT_FOUND(HttpStatus.BAD_REQUEST,"존재하지 않는 보드 입니다.");
+    ACCESS_DENIED(HttpStatus.BAD_REQUEST, "권한이 없습니다.");
 
     private HttpStatus status;
     private String message;

@@ -1,16 +1,17 @@
 package com.sos.trellosos.domain.board.service;
 
-import com.sos.trellosos.CommonResponseDto;
+
 import com.sos.trellosos.domain.board.Board;
 import com.sos.trellosos.domain.board.dto.BoardRequestDto;
 import com.sos.trellosos.domain.board.dto.BoardResponseDto;
 import com.sos.trellosos.domain.board.repository.BoardRepository;
-import com.sos.trellosos.domain.board.repository.BoardUserRepository;
 import com.sos.trellosos.domain.security.UserDetailsImpl;
 import com.sos.trellosos.domain.user.User;
 import com.sos.trellosos.domain.user.UserRepository;
-import com.sos.trellosos.exception.CustomException;
-import com.sos.trellosos.exception.ErrorCode;
+
+import com.sos.trellosos.global.dto.CommonResponseDto;
+import com.sos.trellosos.global.exception.CustomException;
+import com.sos.trellosos.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
