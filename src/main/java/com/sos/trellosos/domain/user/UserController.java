@@ -11,8 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.concurrent.RejectedExecutionException;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
@@ -23,7 +21,9 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/signup")
-    public ResponseEntity<Object> signup(@Valid @RequestBody UserRequestDto userRequestDto) {
+    public ResponseEntity<Object> signup(
+            @Valid @RequestBody UserRequestDto userRequestDto
+    ) {
         userService.signup(userRequestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED.value())
@@ -32,7 +32,10 @@ public class UserController {
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<CommonResponseDto> login(@RequestBody UserRequestDto userRequestDto, HttpServletResponse response) {
+    public ResponseEntity<CommonResponseDto> login(
+            @RequestBody UserRequestDto userRequestDto,
+            HttpServletResponse response
+    ) {
         userService.login(userRequestDto);
 
         jwtUtil.addJwtToCookie(jwtUtil.createToken(userRequestDto.getUsername()), response);
@@ -43,10 +46,24 @@ public class UserController {
 
     // 회원탈퇴
     @DeleteMapping
-    public ResponseEntity<CommonResponseDto> deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<CommonResponseDto> deleteUser(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
         userService.deleteUser(userDetails);
 
         return ResponseEntity.ok()
                 .body(new CommonResponseDto("회원탈퇴 성공", HttpStatus.OK.value()));
+    }
+
+    // 회원정보 수정
+    @PatchMapping
+    ResponseEntity<CommonResponseDto> updateUser(
+            @RequestBody UserRequestDto userRequestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        userService.updateUser(userRequestDto, userDetails);
+
+        return ResponseEntity.ok()
+                .body(new CommonResponseDto("회원정보 수정 성공", HttpStatus.OK.value()));
     }
 }

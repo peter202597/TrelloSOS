@@ -3,6 +3,7 @@ package com.sos.trellosos.domain.user;
 import com.sos.trellosos.domain.security.UserDetailsImpl;
 import com.sos.trellosos.exception.CustomException;
 import com.sos.trellosos.exception.ErrorCode;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,7 @@ public class UserService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_MATCHES2));
 
-        if(!passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new CustomException(ErrorCode.PASSWORD_NOT_MATCHES);
         }
     }
@@ -59,5 +60,31 @@ public class UserService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         userRepository.delete(user);
+    }
+
+    // 회원정보 수정
+    @Transactional
+    public void updateUser(UserRequestDto userRequestDto, UserDetailsImpl userDetails) {
+        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
+                () -> new IllegalArgumentException("로그인을 해주세요")
+        );
+
+        String checkPassword = userRequestDto.getCheckPassword();
+        String encodedPassword = passwordEncoder.encode(userRequestDto.getPassword());
+
+        if (userRepository.findByUsername(userRequestDto.getUsername()).isPresent()) {
+            throw new CustomException(ErrorCode.ALREADY_EXIST_USER);
+        }
+
+        if (!passwordEncoder.matches(userRequestDto.getPassword(), encodedPassword)) {
+            throw new CustomException(ErrorCode.PASSWORD_NOT_MATCHES);
+        }
+
+        if (user.getPassword().contains(userRequestDto.getUsername())) {
+            throw new CustomException(ErrorCode.ID_PW_SAME);
+        }
+
+        user.update(userRequestDto, encodedPassword);
+        userRepository.save(user);
     }
 }
