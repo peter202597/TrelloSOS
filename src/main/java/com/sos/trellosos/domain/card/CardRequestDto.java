@@ -14,7 +14,7 @@ public class CardRequestDto {
   private String cardName;
   private String cardColor;
   private String cardDescription;
-  private Integer order;
+  private Integer sequence;
   private Long userId;
 
 }
