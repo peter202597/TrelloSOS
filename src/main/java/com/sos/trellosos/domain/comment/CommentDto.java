@@ -1,10 +1,6 @@
 package com.sos.trellosos.domain.comment;
 
-import lombok.Getter;
+import java.time.LocalDateTime;
 
-@Getter
-public class CommentDto {
-
-    private Long userId;
-    private String text;
+public record CommentDto(Long id, String text, Long userId, LocalDateTime createdAt) {
 }

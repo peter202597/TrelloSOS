@@ -1,6 +1,7 @@
 package com.sos.trellosos.domain.card;
 
 
+
 import com.sos.trellosos.domain.column.entity.Columns;
 import com.sos.trellosos.domain.column.repository.ColumnRepository;
 import com.sos.trellosos.domain.user.User;
@@ -29,12 +30,14 @@ public class CardService {
 
 
   public CardResponseDto createCard(CardRequestDto requestDto) {
-    Columns column = columnRepository.findById(requestDto.getColumnId()).orElseThrow(
+
+    Columns columns = columnRepository.findById(requestDto.getColumnId()).orElseThrow(
         () -> new CustomException(ErrorCode.COLUMN_NOT_FOUND)
     );
     Integer count = cardRepository.countByColumnsId(requestDto.getColumnId()) + 1;
 
     Card card = new Card(requestDto);
+
 
     card.setColumns(column);
     card.setSequence(count);

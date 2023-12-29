@@ -17,8 +17,8 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<Comment> addComment(@PathVariable Long cardId, @RequestBody CommentDto commentDto) {
-        Comment comment = commentService.addCommentToCard(cardId, commentDto.getUserId(), commentDto.getText());
-        return new ResponseEntity<>(comment, HttpStatus.CREATED);
+    public ResponseEntity<CommentDto> addComment(@PathVariable Long cardId, @RequestBody CommentDto requestDto) {
+        CommentDto commentDto = commentService.addCommentToCard(cardId, requestDto.userId(), requestDto.text());
+        return new ResponseEntity<>(commentDto, HttpStatus.CREATED);
     }
 }
