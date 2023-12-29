@@ -41,4 +41,10 @@ public class User extends Timestamped {
         this.password = password;
         this.email = email;
     }
+
+    public void update(UserRequestDto userRequestDto, String password) {
+        this.username = userRequestDto.getUsername();
+        this.password = password;
+        this.email = userRequestDto.getEmail();
+    }
 }

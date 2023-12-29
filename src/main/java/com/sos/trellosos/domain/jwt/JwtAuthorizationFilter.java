@@ -1,9 +1,8 @@
 package com.sos.trellosos.domain.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.sos.trellosos.domain.security.UserDetailsImpl;
-import com.sos.trellosos.domain.security.UserDetailsService;
+import com.sos.trellosos.domain.security.UserDetailsServiceImpl;
 import com.sos.trellosos.global.dto.CommonResponseDto;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -26,7 +25,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
-    private final UserDetailsService userDetailsService;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -42,7 +41,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                 String username = info.getSubject();
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
                 // -> userDetails 에 담고
-                UserDetailsImpl userDetails = userDetailsService.getUserDetails(username);
+                UserDetailsImpl userDetails = userDetailsServiceImpl.loadUserByUsername(username);
                 // -> authentication의 principal 에 담고
                 Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 // -> securityContent 에 담고
@@ -61,5 +60,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+
     }
 }
