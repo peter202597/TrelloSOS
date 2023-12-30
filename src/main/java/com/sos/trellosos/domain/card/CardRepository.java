@@ -14,13 +14,13 @@ public interface CardRepository extends JpaRepository<Card, Long> {
 
   @Transactional
   @Modifying
-  @Query("UPDATE Card c SET c.sequence = c.sequence + 1 WHERE c.sequence BETWEEN ?1 AND ?2")
-  void incrementSequenceBetween(int start, int end);
+  @Query("UPDATE Card c SET c.sequence = c.sequence + 1 WHERE c.sequence BETWEEN ?1 AND ?2 AND c.columns.id = ?3")
+  void incrementSequenceBetween(int start, int end, Long columnId);
 
   @Transactional
   @Modifying
-  @Query("UPDATE Card c SET c.sequence = c.sequence - 1 WHERE c.sequence BETWEEN ?1 AND ?2")
-  void decrementSequenceBetween(int start, int end);
+  @Query("UPDATE Card c SET c.sequence = c.sequence - 1 WHERE c.sequence BETWEEN ?1 AND ?2 AND c.columns.id = ?3")
+  void decrementSequenceBetween(int start, int end, Long columnId);
 
 
 
