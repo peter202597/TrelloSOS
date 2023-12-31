@@ -11,8 +11,6 @@ public class ColumnRequestDto {
     @NotBlank
     private Long userId;
     @NotBlank
-    private Long columnSequence;
-    @NotBlank
     private String columnName;
 
 }

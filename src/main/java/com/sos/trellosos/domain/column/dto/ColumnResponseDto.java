@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class ColumnResponseDto extends CommonResponseDto {
 
     private Long id;
-    private Long columnSequence;
+    private Integer columnSequence;
     private String columnName;
 
     public ColumnResponseDto(Columns columns) {
