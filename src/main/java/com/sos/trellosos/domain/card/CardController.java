@@ -79,7 +79,7 @@ public class CardController {
         .body(new CommonResponseDto("카드가 삭제되었습니다.", HttpStatus.OK.value()));
   }
 
-  @PatchMapping("/cards/{cardId}")
+  @PatchMapping("/cards/{cardId}/sequence")
   public ResponseEntity<List<CardResponseDto>> changeSequence(
       @PathVariable Long cardId,
       @RequestBody ChangeSequenceRequestDto requestDto) {
@@ -87,6 +87,25 @@ public class CardController {
     return ResponseEntity
         .status(HttpStatus.OK.value())
         .body(cardService.changeSequence(cardId, requestDto));
+  }
+
+  @PatchMapping("/cards/{cardId}/column")
+  public ResponseEntity<CardResponseDto> changeColumn(
+      @PathVariable Long cardId,
+      @RequestBody ChangeColumnRequestDto requestDto
+  ) {
+    CardResponseDto responseDto = cardService.changeColumn(cardId, requestDto);
+
+    return ResponseEntity
+        .status(HttpStatus.OK.value())
+        .body(responseDto);
+  }
+  @DeleteMapping("/cards")
+  public ResponseEntity<CommonResponseDto> deleteAll() {
+    cardService.deleteAll();
+    return ResponseEntity.
+        status(HttpStatus.OK.value())
+        .body(new CommonResponseDto("일괄삭제 완료", HttpStatus.OK.value()));
   }
 
 }

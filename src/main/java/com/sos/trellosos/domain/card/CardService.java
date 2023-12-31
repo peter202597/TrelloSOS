@@ -39,7 +39,7 @@ public class CardService {
     Card card = new Card(requestDto);
 
 
-    card.setColumns(column);
+    card.setColumns(columns);
     card.setSequence(count);
 
     Card savedCard = cardRepository.save(card);
@@ -104,16 +104,56 @@ public class CardService {
 
     Card card = findCard(cardId);
     Integer currentSequence = card.getSequence();
+    Long columnId = card.getColumns().getId();
 
     if (currentSequence < newSequence) {
-      cardRepository.decrementSequenceBetween(currentSequence + 1, newSequence);
+      cardRepository.decrementSequenceBetween(currentSequence + 1, newSequence, columnId);
     } else {
-      cardRepository.incrementSequenceBetween(newSequence, currentSequence - 1);
+      cardRepository.incrementSequenceBetween(newSequence, currentSequence - 1, columnId);
     }
     card.setSequence(newSequence);
     cardRepository.save(card);
 
     return cardRepository.findAllByOrderBySequenceAsc().stream().map(CardResponseDto::new)
         .toList();
+  }
+
+  @Transactional
+  public CardResponseDto changeColumn(Long cardId, ChangeColumnRequestDto requestDto) {
+    Card card = findCard(cardId);
+
+    Columns newColumns = columnRepository.findById(requestDto.getNewColumnsId()).orElseThrow(
+        () -> new CustomException(ErrorCode.COLUMN_NOT_FOUND)
+    );
+
+    Integer currentSequence = card.getSequence();
+    Integer newSequence = requestDto.getNewSequence();
+
+    Long oldColumnsId = card.getColumns().getId();
+    Long newColumnsId = newColumns.getId();
+
+    int lastSequenceInOldColumns = cardRepository.countByColumnsId(oldColumnsId);
+
+    card.setColumns(newColumns);
+
+
+    int lastSequenceInNewColumns = cardRepository.countByColumnsId(newColumnsId);
+
+    // 기존 컬럼에 있는 기존 카드의 시퀀스보다 큰 카드들은 시퀀스 -1
+    // 새로운 컬럼에 있는 새 시퀀스 보다 크거나 같은 카드들은 시퀀스 +1
+      cardRepository.decrementSequenceBetween(currentSequence + 1, lastSequenceInOldColumns, oldColumnsId);
+
+      cardRepository.incrementSequenceBetween(newSequence, lastSequenceInNewColumns, newColumnsId);
+
+    card.setSequence(newSequence);
+
+
+
+    return new CardResponseDto(card);
+  }
+
+  @Transactional
+  public void deleteAll() {
+    cardRepository.deleteAll();
   }
 }
