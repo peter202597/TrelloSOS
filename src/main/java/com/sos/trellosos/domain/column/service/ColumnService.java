@@ -2,6 +2,7 @@ package com.sos.trellosos.domain.column.service;
 
 import com.sos.trellosos.domain.board.Board;
 import com.sos.trellosos.domain.board.repository.BoardRepository;
+import com.sos.trellosos.domain.column.dto.ChangeColumnSequenceRequestDto;
 import com.sos.trellosos.domain.column.dto.ColumnRequestDto;
 import com.sos.trellosos.domain.column.dto.ColumnResponseDto;
 //import com.sos.trellosos.domain.column.dto.SequenceChangeRequestDto;
@@ -31,6 +32,7 @@ public class ColumnService {
     //컬럼 생성
     public CommonResponseDto createColumn(ColumnRequestDto columnRequestDto) {
         Columns columns = new Columns(columnRequestDto);
+        Integer count = columnRepository.countByBoardId(columnRequestDto.getBoardId()) + 1;
         Board board = boardRepository.findById(columnRequestDto.getBoardId()).orElseThrow(
                 () -> new CustomException(ErrorCode.BOARD_NOT_FOUND)
         );
@@ -39,6 +41,7 @@ public class ColumnService {
         );
         columns.setBoard(board);
         columns.setUser(user);
+        columns.setSequence(count);
         columnRepository.save(columns);
         return new CommonResponseDto("컬럼 생성 성공", HttpStatus.CREATED.value());
     }
@@ -46,9 +49,7 @@ public class ColumnService {
     //컬럼 수정
     @Transactional
     public ColumnResponseDto updateColumn(Long columnId, ColumnRequestDto columnRequestDto) {
-        Columns columns = columnRepository.findById(columnId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 컬럼 입니다.")
-        );
+        Columns columns = findColumn(columnId);
         columns.updateColumn(columnRequestDto);
 
         return new ColumnResponseDto(columns);
@@ -57,32 +58,31 @@ public class ColumnService {
     //컬럼 삭제
     @Transactional
     public CommonResponseDto deleteColumn(Long columnId) {
-        Columns columns = columnRepository.findById(columnId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 컬럼 입니다.")
-        );
+        Columns columns = findColumn(columnId);
         columnRepository.delete(columns);
         return new CommonResponseDto(columnId + "컬럼 삭제 성공", HttpStatus.OK.value());
     }
 
-    //컬럼 이동
-//    public List<ColumnResponseDto> updateColumnSequence(Long columnId, SequenceChangeRequestDto request) {
-//        Columns columns = columnRepository.findById(columnId)
-//                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 컬럼 입니다.")
-//        );
-//        // 요청에서 받은 컬럼의 이동 방향에 따라 순서를 변경합니다.
-//        if (request.getDirection().equals("up")) {
-//            // 순서를 올리는 로직
-//            columnToMove.sequenceUp();
-//        } else if (request.getDirection().equals("down")) {
-//            // 순서를 내리는 로직
-//            columnToMove.sequenceDown();
-//        }
-//
-//        // 변경된 컬럼을 저장합니다.
-//        columnRepository.save(columnToMove);
-//
-//        // 변경된 컬럼 목록을 반환하거나 업데이트된 정보를 리턴할 수 있습니다.
-//        List<Columns> updatedColumns = columnRepository.findAll(); // 업데이트된 컬럼 목록 조회
-//        return convertToColumnResponseDtoList(updatedColumns);
-//    }
+    //컬럼 순서 이동
+    @Transactional
+    public List<ColumnResponseDto> changeColumnSequence(Long columnId, ChangeColumnSequenceRequestDto changeColumnSequenceRequestDto) {
+        Integer newSequence = changeColumnSequenceRequestDto.getNewSequence();
+        Columns column = findColumn(columnId);
+        Integer currentSequence = column.getSequence();
+        Long boardId = column.getBoard().getId();
+
+        if (currentSequence < newSequence){
+        columnRepository.sequenceDown(currentSequence + 1, newSequence, boardId);
+        } else {columnRepository.sequenceUp(newSequence, currentSequence - 1, boardId);}
+        column.setSequence(newSequence);
+
+        return columnRepository.findAllByOrderBySequenceAsc().stream().map(ColumnResponseDto::new).toList();
+    }
+
+    //중복문 처리
+    private Columns findColumn(Long columnId) {
+        return columnRepository.findById(columnId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 컬럼 입니다.")
+                );
+    }
 }

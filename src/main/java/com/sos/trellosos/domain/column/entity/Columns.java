@@ -18,10 +18,10 @@ public class Columns extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private Long sequence;
+    @Column
+    private Integer sequence;
 
-    @Column(unique = true)
+    @Column
     private String columnName;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,7 +39,7 @@ public class Columns extends Timestamped {
 
     //컬럼 수정
     public void updateColumn(ColumnRequestDto columnRequestDto) {
-        this.sequence = columnRequestDto.getColumnSequence();
+//        this.sequence = columnRequestDto.getColumnSequence();
         this.columnName = columnRequestDto.getColumnName();
     }
 }
