@@ -27,7 +27,7 @@ public class CardController {
   private final CardService cardService;
 
   @PostMapping("/cards")
-  public ResponseEntity<CardResponseDto> createCard(@RequestBody CardRequestDto requestDto) {
+  public ResponseEntity<CardResponseDto> createCard(@RequestBody CreateCardRequestDto requestDto) {
     CardResponseDto responseDto = cardService.createCard(requestDto);
 
     return ResponseEntity
@@ -61,7 +61,7 @@ public class CardController {
   @PutMapping("cards/{cardId}")
   public ResponseEntity<CardResponseDto> updateCard(
       @PathVariable Long cardId,
-      @Valid @RequestBody CardRequestDto requestDto
+      @Valid @RequestBody UpdateCardRequestDto requestDto
   ) {
     CardResponseDto responseDto = cardService.updateCard(cardId, requestDto);
 
@@ -122,4 +122,27 @@ public class CardController {
         .body(responseDto);
   }
 
+  @PatchMapping("/cards/{cardId}/workers")
+  public ResponseEntity<CardResponseDto> allocateWorker(
+      @PathVariable Long cardId,
+      @RequestBody WorkerRequestDto requestDto
+  ) {
+    CardResponseDto responseDto = cardService.allocateWorker(cardId, requestDto);
+
+    return ResponseEntity
+        .status(HttpStatus.OK.value())
+        .body(responseDto);
+  }
+
+  @DeleteMapping("/cards/{cardId}/workers")
+  public ResponseEntity<CardResponseDto> detachWorker(
+      @PathVariable Long cardId,
+      @RequestBody WorkerRequestDto requestDto
+  ) {
+    CardResponseDto responseDto = cardService.detachWorker(cardId, requestDto);
+
+    return ResponseEntity
+        .status(HttpStatus.OK.value())
+        .body(responseDto);
+  }
 }

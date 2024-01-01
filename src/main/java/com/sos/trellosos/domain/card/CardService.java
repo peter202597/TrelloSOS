@@ -5,6 +5,8 @@ import com.sos.trellosos.domain.column.entity.Columns;
 import com.sos.trellosos.domain.column.repository.ColumnRepository;
 import com.sos.trellosos.domain.user.User;
 import com.sos.trellosos.domain.user.UserRepository;
+import com.sos.trellosos.domain.worker.Worker;
+import com.sos.trellosos.domain.worker.WorkerRepository;
 import com.sos.trellosos.global.exception.CustomException;
 import com.sos.trellosos.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
@@ -23,8 +25,9 @@ public class CardService {
   private final CardRepository cardRepository;
   private final ColumnRepository columnRepository;
   private final UserRepository userRepository;
+  private final WorkerRepository workerRepository;
 
-  public CardResponseDto createCard(CardRequestDto requestDto) {
+  public CardResponseDto createCard(CreateCardRequestDto requestDto) {
 
     Columns columns = findColumn(requestDto.getColumnId());
 
@@ -58,7 +61,7 @@ public class CardService {
   }
 
   @Transactional
-  public CardResponseDto updateCard(Long cardId, CardRequestDto requestDto) {
+  public CardResponseDto updateCard(Long cardId, UpdateCardRequestDto requestDto) {
     Card card = findCard(cardId);
 
     card.update(requestDto);
@@ -109,18 +112,18 @@ public class CardService {
     Integer lastSequenceInOldColumns = cardRepository.countByColumnsId(oldColumnsId);
 
     card.setColumns(newColumns);
+    card.setSequence(null);
 
     Integer lastSequenceInNewColumns = cardRepository.countByColumnsId(newColumnsId);
 
-    // 기존 컬럼에 있는 기존 카드의 시퀀스보다 큰 카드들은 시퀀스 -1
     cardRepository.pullSequence(currentSequence + 1, lastSequenceInOldColumns, oldColumnsId);
 
-    // 새로운 컬럼에 있는 새 시퀀스 보다 크거나 같은 카드들은 시퀀스 +1
     cardRepository.pushSequence(newSequence, lastSequenceInNewColumns, newColumnsId);
 
     card.setSequence(newSequence);
 
     return new CardResponseDto(card);
+
   }
 
   @Transactional
@@ -138,6 +141,34 @@ public class CardService {
     return new CardResponseDto(card);
 
   }
+
+
+  @Transactional
+  public CardResponseDto allocateWorker(Long cardId, WorkerRequestDto requestDto) {
+    Card card = findCard(cardId);
+
+    User user = findUser(requestDto.getUserId());
+
+    card.allocateWorker(user);
+
+    return new CardResponseDto(card);
+  }
+
+  @Transactional
+  public CardResponseDto detachWorker(Long cardId, WorkerRequestDto requestDto) {
+    Card card = findCard(cardId);
+
+    Worker worker = workerRepository.findByUserIdAndCardId(requestDto.getUserId(), cardId)
+        .orElseThrow(
+            () -> new CustomException(ErrorCode.WORKER_NOT_FOUND)
+        );
+
+    card.detachWorker(worker);
+
+    return new CardResponseDto(card);
+
+  }
+
 
   private Card findCard(Long cardId) {
     return cardRepository.findById(cardId).orElseThrow(

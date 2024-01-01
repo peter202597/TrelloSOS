@@ -45,7 +45,7 @@ public class Card extends Timestamped {
 
   private LocalDateTime dueDate;
 
-  public Card(CardRequestDto requestDto) {
+  public Card(CreateCardRequestDto requestDto) {
     this.cardName = requestDto.getCardName();
     this.cardDescription = requestDto.getCardDescription();
     this.cardColor = requestDto.getCardColor();
@@ -80,7 +80,7 @@ public class Card extends Timestamped {
   }
 
 
-  public void update(CardRequestDto requestDto) {
+  public void update(UpdateCardRequestDto requestDto) {
     if (requestDto.getCardName() != null) {
       this.cardName = requestDto.getCardName();
     }
@@ -91,5 +91,10 @@ public class Card extends Timestamped {
       this.cardDescription = requestDto.getCardDescription();
     }
 
+  }
+
+  public void detachWorker(Worker worker) {
+    worker.getUser().getWorkers().remove(worker);
+    this.workers.remove(worker);
   }
 }
