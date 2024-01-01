@@ -1,6 +1,9 @@
 package com.sos.trellosos.domain.card;
 
+import com.sos.trellosos.domain.worker.Worker;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,12 +13,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CardResponseDto {
+
   String cardName;
   String cardColor;
   String cardDescription;
   Integer sequence;
   LocalDateTime dueDate;
-  String worker;
+  List<String> workers = new ArrayList<>();
 
   public CardResponseDto(Card card) {
     this.cardName = card.getCardName();
@@ -23,6 +27,9 @@ public class CardResponseDto {
     this.cardDescription = card.getCardDescription();
     this.sequence = card.getSequence();
     this.dueDate = card.getDueDate();
+    for (Worker worker : card.getWorkers()) {
+      this.workers.add(worker.getUser().getUsername());
+    }
   }
 
 }

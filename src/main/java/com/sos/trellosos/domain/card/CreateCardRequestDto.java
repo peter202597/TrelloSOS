@@ -3,18 +3,14 @@ package com.sos.trellosos.domain.card;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CardRequestDto {
+public class CreateCardRequestDto {
 
   private Long columnId;
   private String cardName;
   private String cardColor;
   private String cardDescription;
-  private Integer sequence;
-  private Long userId;
 
 }
