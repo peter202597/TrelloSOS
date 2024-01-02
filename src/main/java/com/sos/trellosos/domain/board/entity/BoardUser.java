@@ -1,10 +1,10 @@
-package com.sos.trellosos.domain.board;
+package com.sos.trellosos.domain.board.entity;
 
+import com.sos.trellosos.domain.board.entity.Board;
 import com.sos.trellosos.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Entity
 @Getter
@@ -14,10 +14,10 @@ public class BoardUser {
     @GeneratedValue
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "User_Id")
+    @JoinColumn(name = "user_id")
     private User user;
     @ManyToOne
-    @JoinColumn(name = "Board_Id")
+    @JoinColumn(name = "board_id")
     private Board board;
 
     public BoardUser(Board board, User user) {

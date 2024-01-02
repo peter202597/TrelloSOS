@@ -2,6 +2,7 @@ package com.sos.trellosos.domain.card;
 
 
 import com.sos.trellosos.global.dto.CommonResponseDto;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,7 +27,7 @@ public class CardController {
   private final CardService cardService;
 
   @PostMapping("/cards")
-  public ResponseEntity<CardResponseDto> createCard(@RequestBody CardRequestDto requestDto) {
+  public ResponseEntity<CardResponseDto> createCard(@RequestBody CreateCardRequestDto requestDto) {
     CardResponseDto responseDto = cardService.createCard(requestDto);
 
     return ResponseEntity
@@ -60,7 +61,7 @@ public class CardController {
   @PutMapping("cards/{cardId}")
   public ResponseEntity<CardResponseDto> updateCard(
       @PathVariable Long cardId,
-      @RequestBody CardRequestDto requestDto
+      @Valid @RequestBody UpdateCardRequestDto requestDto
   ) {
     CardResponseDto responseDto = cardService.updateCard(cardId, requestDto);
 
@@ -100,6 +101,7 @@ public class CardController {
         .status(HttpStatus.OK.value())
         .body(responseDto);
   }
+
   @DeleteMapping("/cards")
   public ResponseEntity<CommonResponseDto> deleteAll() {
     cardService.deleteAll();
@@ -108,4 +110,39 @@ public class CardController {
         .body(new CommonResponseDto("일괄삭제 완료", HttpStatus.OK.value()));
   }
 
+  @PatchMapping("/cards/{cardId}/duedate")
+  public ResponseEntity<CardResponseDto> changeDueDate(
+      @PathVariable Long cardId,
+      @RequestBody @Valid DueDateRequestDto requestDto
+  ) {
+    CardResponseDto responseDto = cardService.setDueDate(cardId, requestDto);
+
+    return ResponseEntity
+        .status(HttpStatus.OK.value())
+        .body(responseDto);
+  }
+
+  @PatchMapping("/cards/{cardId}/workers")
+  public ResponseEntity<CardResponseDto> allocateWorker(
+      @PathVariable Long cardId,
+      @RequestBody WorkerRequestDto requestDto
+  ) {
+    CardResponseDto responseDto = cardService.allocateWorker(cardId, requestDto);
+
+    return ResponseEntity
+        .status(HttpStatus.OK.value())
+        .body(responseDto);
+  }
+
+  @DeleteMapping("/cards/{cardId}/workers")
+  public ResponseEntity<CardResponseDto> detachWorker(
+      @PathVariable Long cardId,
+      @RequestBody WorkerRequestDto requestDto
+  ) {
+    CardResponseDto responseDto = cardService.detachWorker(cardId, requestDto);
+
+    return ResponseEntity
+        .status(HttpStatus.OK.value())
+        .body(responseDto);
+  }
 }

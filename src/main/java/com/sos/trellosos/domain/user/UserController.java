@@ -6,11 +6,17 @@ import com.sos.trellosos.global.dto.CommonResponseDto;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
@@ -21,9 +27,19 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/signup")
-    public ResponseEntity<Object> signup(
-            @Valid @RequestBody UserRequestDto userRequestDto
+    public ResponseEntity<CommonResponseDto> signup(
+            @Valid @RequestBody UserRequestDto userRequestDto,
+            BindingResult bindingResult
     ) {
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        if (fieldErrors.size() > 0) {
+            for (FieldError fieldError : bindingResult.getFieldErrors()) {
+                log.error(fieldError.getField() + " 필드 : " + fieldError.getDefaultMessage());
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
+                    .body(new CommonResponseDto("회원가입 실패", HttpStatus.BAD_REQUEST.value()));
+        }
+
         userService.signup(userRequestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED.value())
@@ -58,9 +74,19 @@ public class UserController {
     // 회원정보 수정
     @PatchMapping
     ResponseEntity<CommonResponseDto> updateUser(
-            @RequestBody UserRequestDto userRequestDto,
+            @Valid @RequestBody UserRequestDto userRequestDto,
+            BindingResult bindingResult,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        if (fieldErrors.size() > 0) {
+            for (FieldError fieldError : bindingResult.getFieldErrors()) {
+                log.error(fieldError.getField() + " 필드 : " + fieldError.getDefaultMessage());
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
+                    .body(new CommonResponseDto("회원정보 수정 실패", HttpStatus.BAD_REQUEST.value()));
+        }
+
         userService.updateUser(userRequestDto, userDetails);
 
         return ResponseEntity.ok()

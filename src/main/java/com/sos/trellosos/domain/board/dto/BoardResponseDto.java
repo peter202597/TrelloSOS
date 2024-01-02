@@ -1,6 +1,6 @@
 package com.sos.trellosos.domain.board.dto;
 
-import com.sos.trellosos.domain.board.Board;
+import com.sos.trellosos.domain.board.entity.Board;
 import lombok.Getter;
 
 @Getter

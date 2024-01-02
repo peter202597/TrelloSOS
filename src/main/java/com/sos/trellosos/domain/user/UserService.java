@@ -22,20 +22,10 @@ public class UserService {
         String checkPassword = userRequestDto.getCheckPassword();
         String email = userRequestDto.getEmail();
 
+        validateUserRequest(password, checkPassword, username);
+
         String encodedPassword = passwordEncoder.encode(password);
-        String encodedCheckPassword = passwordEncoder.encode(checkPassword);
 
-        if (userRepository.findByUsername(username).isPresent()) {
-            throw new CustomException(ErrorCode.ALREADY_EXIST_USER);
-        }
-
-        if (!passwordEncoder.matches(password, encodedCheckPassword)) {
-            throw new CustomException(ErrorCode.PASSWORD_NOT_MATCHES);
-        }
-
-        if (password.contains(username)) {
-            throw new CustomException(ErrorCode.ID_PW_SAME);
-        }
 
         User user = new User(username, encodedPassword, email);
         userRepository.save(user);
@@ -69,22 +59,29 @@ public class UserService {
                 () -> new IllegalArgumentException("로그인을 해주세요")
         );
 
+        String username = userRequestDto.getUsername();
         String checkPassword = userRequestDto.getCheckPassword();
+
+        validateUserRequest(userRequestDto.getPassword(), checkPassword, username);
+
         String encodedPassword = passwordEncoder.encode(userRequestDto.getPassword());
-
-        if (userRepository.findByUsername(userRequestDto.getUsername()).isPresent()) {
-            throw new CustomException(ErrorCode.ALREADY_EXIST_USER);
-        }
-
-        if (!passwordEncoder.matches(userRequestDto.getPassword(), encodedPassword)) {
-            throw new CustomException(ErrorCode.PASSWORD_NOT_MATCHES);
-        }
-
-        if (user.getPassword().contains(userRequestDto.getUsername())) {
-            throw new CustomException(ErrorCode.ID_PW_SAME);
-        }
 
         user.update(userRequestDto, encodedPassword);
         userRepository.save(user);
+    }
+
+    // 유효성 검사
+    private void validateUserRequest(String password, String checkPassword, String username) {
+        if (userRepository.findByUsername(username).isPresent()) {
+            throw new CustomException(ErrorCode.ALREADY_EXIST_USER);
+        }
+
+        if (!password.equals(checkPassword)) {
+            throw new CustomException(ErrorCode.PASSWORD_NOT_MATCHES);
+        }
+
+        if (password.contains(username)) {
+            throw new CustomException(ErrorCode.ID_PW_SAME);
+        }
     }
 }

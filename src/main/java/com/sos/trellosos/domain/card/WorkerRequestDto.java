@@ -3,7 +3,7 @@ package com.sos.trellosos.domain.card;
 import lombok.Getter;
 
 @Getter
-public class ChangeSequenceRequestDto {
+public class WorkerRequestDto {
 
-  private Integer newSequence;
+  private Long userId;
 }
