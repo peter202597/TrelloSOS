@@ -568,6 +568,45 @@
       --line: #e5e5e5;
       --link: #5498ff;
 
+    }
+
+    /* 모달 스타일링 */
+    .modal {
+      display: none; /* 초기 상태는 숨김 */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* 모달 내용 스타일 */
+    .modal-content {
+      width: 90%; /* 또는 적절한 너비 */
+      height: 90vh; /* 또는 적절한 높이 */
+    }
+
+
+    /* 닫기 버튼 */
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+
 
   </style>
   <title>TrelloSOS</title>
@@ -907,5 +946,51 @@
     <div class="add-a-card2">Add a Card</div>
   </div>
 </div>
+
+<!-- 모달 오버레이 -->
+<div id="myModal" class="modal">
+  <!-- 모달 콘텐츠 -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+  // 모달 가져오기
+  var modal = document.getElementById("myModal");
+
+  // 버튼 가져오기
+  var btn = document.getElementsByClassName("add2")[0];
+
+  // 닫기(span) 요소 가져오기
+  var span = document.getElementsByClassName("close")[0];
+
+  // 버튼 클릭 시 모달 열기
+  btn.onclick = function() {
+    fetch('http://localhost:8080/boards/board-index')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('modal-body').innerHTML = data;
+      modal.style.display = "block";
+    })
+    .catch(error => console.error('Error:', error));
+  };
+
+  // <span> (x) 클릭 시 모달 닫기
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  // 모달 외부 클릭 시 닫기
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+</script>
+
+
+
 </body>
 </html>
