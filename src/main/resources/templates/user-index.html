@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./vars.css" />
+    <link rel="stylesheet" href="./style.css" />
+
+    <style>
+      a,
+      button,
+      input,
+      select,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      * {
+        margin: 0;
+        padding: 0;
+        border: none;
+        text-decoration: none;
+        appearance: none;
+        background: none;
+
+        -webkit-font-smoothing: antialiased;
+      }
+    </style>
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="share-board">
+      <div class="title">
+        <div class="share-board2">Share board</div>
+        <svg
+          class="close"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g clip-path="url(#clip0_8_58)">
+            <path
+              d="M17.7338 6.27531C17.3788 5.92036 16.8055 5.92036 16.4505 6.27531L12 10.7167L7.54949 6.26621C7.19454 5.91126 6.62116 5.91126 6.26621 6.26621C5.91126 6.62116 5.91126 7.19454 6.26621 7.54949L10.7167 12L6.26621 16.4505C5.91126 16.8055 5.91126 17.3788 6.26621 17.7338C6.62116 18.0887 7.19454 18.0887 7.54949 17.7338L12 13.2833L16.4505 17.7338C16.8055 18.0887 17.3788 18.0887 17.7338 17.7338C18.0887 17.3788 18.0887 16.8055 17.7338 16.4505L13.2833 12L17.7338 7.54949C18.0796 7.20364 18.0796 6.62116 17.7338 6.27531Z"
+              fill="#E9E9E9"
+            />
+          </g>
+          <defs>
+            <clipPath id="clip0_8_58">
+              <rect width="24" height="24" fill="white" />
+            </clipPath>
+          </defs>
+        </svg>
+      </div>
+      <div class="input">
+        <div class="email-address-or-name">Email address or name</div>
+      </div>
+      <div class="btn-share">
+        <div class="share">Share</div>
+      </div>
+      <div class="dropdown">
+        <div class="member">Member</div>
+        <svg
+          class="keyboard-arrow-down"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6.76668 7.74167L10 10.975L13.2333 7.74167C13.5583 7.41667 14.0834 7.41667 14.4083 7.74167C14.7333 8.06667 14.7333 8.59167 14.4083 8.91667L10.5833 12.7417C10.2583 13.0667 9.73335 13.0667 9.40835 12.7417L5.58335 8.91667C5.25835 8.59167 5.25835 8.06667 5.58335 7.74167C5.90835 7.42501 6.44168 7.41667 6.76668 7.74167Z"
+            fill="#E9E9E9"
+          />
+        </svg>
+      </div>
+      <div class="dropdown2">
+        <div class="admin">Admin</div>
+        <svg
+          class="keyboard-arrow-down2"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6.76668 7.74167L10 10.975L13.2333 7.74167C13.5583 7.41667 14.0834 7.41667 14.4083 7.74167C14.7333 8.06667 14.7333 8.59167 14.4083 8.91667L10.5833 12.7417C10.2583 13.0667 9.73335 13.0667 9.40835 12.7417L5.58335 8.91667C5.25835 8.59167 5.25835 8.06667 5.58335 7.74167C5.90835 7.42501 6.44168 7.41667 6.76668 7.74167Z"
+            fill="#E9E9E9"
+          />
+        </svg>
+      </div>
+      <div class="dropdown3">
+        <div class="member">Member</div>
+        <svg
+          class="keyboard-arrow-down3"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6.76668 7.74167L10 10.975L13.2333 7.74167C13.5583 7.41667 14.0834 7.41667 14.4083 7.74167C14.7333 8.06667 14.7333 8.59167 14.4083 8.91667L10.5833 12.7417C10.2583 13.0667 9.73335 13.0667 9.40835 12.7417L5.58335 8.91667C5.25835 8.59167 5.25835 8.06667 5.58335 7.74167C5.90835 7.42501 6.44168 7.41667 6.76668 7.74167Z"
+            fill="#E9E9E9"
+          />
+        </svg>
+      </div>
+      <div class="btn-link">
+        <svg
+          class="link"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g clip-path="url(#clip0_8_84)">
+            <path
+              d="M17 7H14C13.45 7 13 7.45 13 8C13 8.55 13.45 9 14 9H17C18.65 9 20 10.35 20 12C20 13.65 18.65 15 17 15H14C13.45 15 13 15.45 13 16C13 16.55 13.45 17 14 17H17C19.76 17 22 14.76 22 12C22 9.24 19.76 7 17 7ZM8 12C8 12.55 8.45 13 9 13H15C15.55 13 16 12.55 16 12C16 11.45 15.55 11 15 11H9C8.45 11 8 11.45 8 12ZM10 15H7C5.35 15 4 13.65 4 12C4 10.35 5.35 9 7 9H10C10.55 9 11 8.55 11 8C11 7.45 10.55 7 10 7H7C4.24 7 2 9.24 2 12C2 14.76 4.24 17 7 17H10C10.55 17 11 16.55 11 16C11 15.45 10.55 15 10 15Z"
+              fill="#E9E9E9"
+            />
+          </g>
+          <defs>
+            <clipPath id="clip0_8_84">
+              <rect width="24" height="24" fill="white" />
+            </clipPath>
+          </defs>
+        </svg>
+      </div>
+      <div class="share-this-board-with-a-link">
+        Share this board with a link
+      </div>
+      <div class="qoxowkd-0716">qoxowkd0716</div>
+      <div class="bebegyu-0716">bebegyu0716</div>
+      <div class="info">
+        <div class="qoxowkd-07162">@qoxowkd0716</div>
+        <div class="div">·</div>
+        <div class="workspace-admin">Workspace admin</div>
+      </div>
+      <div class="info2">
+        <div class="bebegyu-07162">@bebegyu0716</div>
+        <div class="div">·</div>
+        <div class="workspace-admin">Workspace admin</div>
+      </div>
+      <div class="you">(you)</div>
+      <div class="create-link">Create link</div>
+      <div class="email">
+        <div class="b">B</div>
+      </div>
+      <div class="email2">
+        <div class="div2">배</div>
+      </div>
+    </div>
+  </body>
+</html>
