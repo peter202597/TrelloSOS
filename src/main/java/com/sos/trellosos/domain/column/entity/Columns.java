@@ -2,7 +2,7 @@ package com.sos.trellosos.domain.column.entity;
 
 import com.sos.trellosos.domain.user.User;
 import com.sos.trellosos.global.entity.Timestamped;
-import com.sos.trellosos.domain.board.Board;
+import com.sos.trellosos.domain.board.entity.Board;
 import com.sos.trellosos.domain.column.dto.ColumnRequestDto;
 import jakarta.persistence.*;
 import lombok.*;

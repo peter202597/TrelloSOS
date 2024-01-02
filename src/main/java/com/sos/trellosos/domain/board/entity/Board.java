@@ -1,11 +1,7 @@
-package com.sos.trellosos.domain.board;
-
-
+package com.sos.trellosos.domain.board.entity;
 
 import com.sos.trellosos.domain.user.User;
 import jakarta.persistence.*;
-
-
 import com.sos.trellosos.domain.board.dto.BoardRequestDto;
 import com.sos.trellosos.global.entity.Timestamped;
 import jakarta.persistence.Entity;
@@ -14,15 +10,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
 @Getter
-@Table(name = "boards")
+@Table(name = "board")
 public class Board extends Timestamped {
 
     @Id
@@ -31,7 +29,7 @@ public class Board extends Timestamped {
     private String boardName;
     private String backgroundColor;
     private String boardDescription;
-    @OneToMany(mappedBy = "board",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<BoardUser> boardUsers = new ArrayList<>();
 
     //보드 생성
@@ -49,6 +47,7 @@ public class Board extends Timestamped {
     }
 
     public void inviteUser(User user) {
-        boardUsers.add(new BoardUser(this,user));
+        BoardUser boardUser = new BoardUser(this, user);
+        this.boardUsers.add(boardUser);
     }
 }

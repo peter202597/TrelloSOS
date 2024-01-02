@@ -1,7 +1,7 @@
 package com.sos.trellosos.domain.board.controller;
 
+import com.sos.trellosos.domain.board.dto.JoinUserRequestDto;
 import com.sos.trellosos.global.dto.CommonResponseDto;
-import com.sos.trellosos.domain.board.Board;
 import com.sos.trellosos.domain.board.dto.BoardRequestDto;
 import com.sos.trellosos.domain.board.dto.BoardResponseDto;
 import com.sos.trellosos.domain.board.service.BoardService;
@@ -26,7 +26,7 @@ public class BoardController {
     }
 
     @GetMapping("")
-    public List<Board> getBoards(
+    public List<BoardResponseDto> getBoards(
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
         return boardService.getBoards(userDetails);
@@ -58,8 +58,8 @@ public class BoardController {
     @PostMapping("/{boardId}/invite")
     public CommonResponseDto inviteUser(
             @PathVariable Long boardId,
-            @RequestBody Long userId,
+            @RequestBody JoinUserRequestDto joinUserRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return boardService.inviteUser(boardId,userId,userDetails);
+        return boardService.inviteUser(boardId,joinUserRequestDto,userDetails);
     }
 }
