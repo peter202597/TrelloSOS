@@ -1,6 +1,6 @@
 package com.sos.trellosos.domain.column.service;
 
-import com.sos.trellosos.domain.board.Board;
+import com.sos.trellosos.domain.board.entity.Board;
 import com.sos.trellosos.domain.board.repository.BoardRepository;
 import com.sos.trellosos.domain.column.dto.ChangeColumnSequenceRequestDto;
 import com.sos.trellosos.domain.column.dto.ColumnRequestDto;

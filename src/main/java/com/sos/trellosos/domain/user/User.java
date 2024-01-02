@@ -1,7 +1,7 @@
 package com.sos.trellosos.domain.user;
 
 import com.sos.trellosos.domain.worker.Worker;
-import com.sos.trellosos.domain.board.BoardUser;
+import com.sos.trellosos.domain.board.entity.BoardUser;
 import com.sos.trellosos.global.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -29,7 +29,7 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private String email;
   
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardUser> boardUsers = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

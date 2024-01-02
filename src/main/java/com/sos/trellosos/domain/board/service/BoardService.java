@@ -1,10 +1,13 @@
 package com.sos.trellosos.domain.board.service;
 
 
-import com.sos.trellosos.domain.board.Board;
+import com.sos.trellosos.domain.board.dto.JoinUserRequestDto;
+import com.sos.trellosos.domain.board.entity.Board;
 import com.sos.trellosos.domain.board.dto.BoardRequestDto;
 import com.sos.trellosos.domain.board.dto.BoardResponseDto;
+import com.sos.trellosos.domain.board.entity.BoardUser;
 import com.sos.trellosos.domain.board.repository.BoardRepository;
+import com.sos.trellosos.domain.board.repository.BoardUserRepository;
 import com.sos.trellosos.domain.security.UserDetailsImpl;
 import com.sos.trellosos.domain.user.User;
 import com.sos.trellosos.domain.user.UserRepository;
@@ -17,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,19 +28,27 @@ import java.util.List;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final BoardUserRepository boardUserRepository;
     //보드 생성
     @Transactional
     public CommonResponseDto createBoard(BoardRequestDto boardRequestDto, UserDetailsImpl userDetails) {
         userCheck(userDetails);
         Board board = new Board(boardRequestDto);
+        board.inviteUser(userDetails.getUser());
         boardRepository.save(board);
         return new CommonResponseDto("보드 생성 성공", HttpStatus.CREATED.value());
     }
 
     //전체 보드 조회
-    public List<Board> getBoards(UserDetailsImpl userDetails) {
+    public List<BoardResponseDto> getBoards(UserDetailsImpl userDetails) {
         userCheck(userDetails);
-        return boardRepository.findAll();
+        //해당 사용자가 등록된 보드만 나오도록 수정필요
+        List<Board> boardList = boardRepository.findAll();
+        List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
+        for(Board board:boardList){
+            boardResponseDtoList.add(new BoardResponseDto(board));
+        }
+        return boardResponseDtoList;
     }
 
     //보드 단건 조회
@@ -48,9 +60,17 @@ public class BoardService {
     //보드 수정
     @Transactional
     public BoardResponseDto updateBoard(Long boardId, BoardRequestDto boardRequestDto,UserDetailsImpl userDetails) {
+        List<BoardUser> boardUserList = boardUserRepository.findByBoardId(boardId);
         userCheck(userDetails);
         Board board = boardCheck(boardId);
-        board.updateBoard(boardRequestDto);
+
+        for(BoardUser boardUser: boardUserList){
+            if(boardUser.getUser().getUsername().equals(userDetails.getUser().getUsername())){
+                board.updateBoard(boardRequestDto);
+                return new BoardResponseDto(board);
+            }
+            return new BoardResponseDto(board);
+        }
 
         return new BoardResponseDto(board);
     }
@@ -58,24 +78,32 @@ public class BoardService {
     //보드 삭제
     @Transactional
     public CommonResponseDto deleteBoard(Long boardId,UserDetailsImpl userDetails) {
+        List<BoardUser> boardUserList = boardUserRepository.findByBoardId(boardId);
         userCheck(userDetails);
         boardCheck(boardId);
-        boardRepository.deleteById(boardId);
-        return new CommonResponseDto(boardId + "번 보드 삭제 성공", HttpStatus.OK.value());
+
+        for(BoardUser boardUser: boardUserList){
+            if(boardUser.getUser().getUsername().equals(userDetails.getUser().getUsername())){
+                boardRepository.deleteById(boardId);
+                return new CommonResponseDto(boardId + "번 보드 삭제 성공", HttpStatus.OK.value());
+            }
+            return new CommonResponseDto("보드 사용자로 등록되어 있지 않습니다.",HttpStatus.BAD_REQUEST.value());
+        }
+        return new CommonResponseDto("보드 사용자로 등록되어 있지 않습니다.",HttpStatus.BAD_REQUEST.value());
     }
 
     //유저 등록
     @Transactional
-    public CommonResponseDto inviteUser(Long boardId, Long userId,UserDetailsImpl userDetails) {
+    public CommonResponseDto inviteUser(Long boardId, JoinUserRequestDto joinUserRequestDto, UserDetailsImpl userDetails) {
         userCheck(userDetails);
         Board board = boardCheck(boardId);
-
-        User user = userRepository.findById(userId).orElseThrow(
+        User user = userRepository.findById(joinUserRequestDto.getUserId()).orElseThrow(
                 ()-> new CustomException(ErrorCode.USER_NOT_MATCHES2)
         );
 
         board.inviteUser(user);
-        return new CommonResponseDto(userId + "유저 등록 성공",HttpStatus.OK.value());
+
+        return new CommonResponseDto(joinUserRequestDto.getUserId() + "유저 등록 성공",HttpStatus.OK.value());
     }
 
     private void userCheck(UserDetailsImpl userDetails) {
