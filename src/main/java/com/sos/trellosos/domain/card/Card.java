@@ -1,31 +1,22 @@
 package com.sos.trellosos.domain.card;
 
 
-import com.sos.trellosos.global.entity.Timestamped;
-import com.sos.trellosos.domain.cardUser.CardUser;
 import com.sos.trellosos.domain.column.entity.Columns;
 import com.sos.trellosos.domain.comment.Comment;
 import com.sos.trellosos.domain.user.User;
 import com.sos.trellosos.domain.worker.Worker;
 import com.sos.trellosos.global.entity.Timestamped;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
