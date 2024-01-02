@@ -29,6 +29,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final BoardUserRepository boardUserRepository;
+
     //보드 생성
     @Transactional
     public CommonResponseDto createBoard(BoardRequestDto boardRequestDto, UserDetailsImpl userDetails) {
@@ -42,54 +43,52 @@ public class BoardService {
     //전체 보드 조회
     public List<BoardResponseDto> getBoards(UserDetailsImpl userDetails) {
         userCheck(userDetails);
-        //해당 사용자가 등록된 보드만 나오도록 수정필요
-        List<Board> boardList = boardRepository.findAll();
+        List<BoardUser> boardList = boardUserRepository.findByUserId(userDetails.getUser().getId());
         List<BoardResponseDto> boardResponseDtoList = new ArrayList<>();
-        for(Board board:boardList){
-            boardResponseDtoList.add(new BoardResponseDto(board));
+        for (BoardUser board : boardList) {
+            boardResponseDtoList.add(new BoardResponseDto(board.getBoard())); //두번째 파라미터로 isOwner
         }
         return boardResponseDtoList;
     }
 
     //보드 단건 조회
-    public BoardResponseDto getBoard(Long boardId,UserDetailsImpl userDetails) {
+    public BoardResponseDto getBoard(Long boardId, UserDetailsImpl userDetails) {
         userCheck(userDetails);
-        Board board = boardCheck(boardId);
-        return new BoardResponseDto(board);
+        BoardUser boardUser = boardUserRepository.findByUserIdAndBoardId(userDetails.getUser().getId(),boardId);
+        return new BoardResponseDto(boardUser.getBoard());
     }
+
     //보드 수정
     @Transactional
-    public BoardResponseDto updateBoard(Long boardId, BoardRequestDto boardRequestDto,UserDetailsImpl userDetails) {
+    public BoardResponseDto updateBoard(Long boardId, BoardRequestDto boardRequestDto, UserDetailsImpl userDetails) {
         List<BoardUser> boardUserList = boardUserRepository.findByBoardId(boardId);
-        userCheck(userDetails);
         Board board = boardCheck(boardId);
 
-        for(BoardUser boardUser: boardUserList){
-            if(boardUser.getUser().getUsername().equals(userDetails.getUser().getUsername())){
+        for (BoardUser boardUser : boardUserList) {
+            if (boardUser.getUser().getId().equals(userDetails.getUser().getId())) {
                 board.updateBoard(boardRequestDto);
                 return new BoardResponseDto(board);
             }
             return new BoardResponseDto(board);
         }
-
         return new BoardResponseDto(board);
     }
 
     //보드 삭제
     @Transactional
-    public CommonResponseDto deleteBoard(Long boardId,UserDetailsImpl userDetails) {
+    public CommonResponseDto deleteBoard(Long boardId, UserDetailsImpl userDetails) {
         List<BoardUser> boardUserList = boardUserRepository.findByBoardId(boardId);
         userCheck(userDetails);
         boardCheck(boardId);
 
-        for(BoardUser boardUser: boardUserList){
-            if(boardUser.getUser().getUsername().equals(userDetails.getUser().getUsername())){
+        for (BoardUser boardUser : boardUserList) {
+            if (boardUser.getUser().getId().equals(userDetails.getUser().getId())) {
                 boardRepository.deleteById(boardId);
                 return new CommonResponseDto(boardId + "번 보드 삭제 성공", HttpStatus.OK.value());
             }
-            return new CommonResponseDto("보드 사용자로 등록되어 있지 않습니다.",HttpStatus.BAD_REQUEST.value());
+            return new CommonResponseDto("보드 사용자로 등록되어 있지 않습니다.", HttpStatus.BAD_REQUEST.value());
         }
-        return new CommonResponseDto("보드 사용자로 등록되어 있지 않습니다.",HttpStatus.BAD_REQUEST.value());
+        return new CommonResponseDto("보드 사용자로 등록되어 있지 않습니다.", HttpStatus.BAD_REQUEST.value());
     }
 
     //유저 등록
@@ -98,19 +97,18 @@ public class BoardService {
         userCheck(userDetails);
         Board board = boardCheck(boardId);
         User user = userRepository.findById(joinUserRequestDto.getUserId()).orElseThrow(
-                ()-> new CustomException(ErrorCode.USER_NOT_MATCHES2)
+                () -> new CustomException(ErrorCode.USER_NOT_MATCHES2)
         );
-
         board.inviteUser(user);
-
-        return new CommonResponseDto(joinUserRequestDto.getUserId() + "유저 등록 성공",HttpStatus.OK.value());
+        return new CommonResponseDto(joinUserRequestDto.getUserId() + "유저 등록 성공", HttpStatus.OK.value());
     }
 
     private void userCheck(UserDetailsImpl userDetails) {
         userRepository.findById(userDetails.getUser().getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
-    private Board boardCheck(Long boardId){
+
+    private Board boardCheck(Long boardId) {
         return boardRepository.findById(boardId).orElseThrow(
                 () -> new CustomException(ErrorCode.BOARD_NOT_FOUND)
         );
