@@ -18,8 +18,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/boards")
 public class BoardController {
@@ -30,14 +31,6 @@ public class BoardController {
             @RequestBody BoardRequestDto boardRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         return boardService.createBoard(boardRequestDto,userDetails);
-    }
-
-    @GetMapping("/board-index")
-    public String boardIndex(Model model) {
-        // 필요한 데이터를 모델에 추가
-        // 예: model.addAttribute("data", data);
-
-        return "board-index"; // 'board-index.html' 페이지 반환
     }
 
     @GetMapping("")
