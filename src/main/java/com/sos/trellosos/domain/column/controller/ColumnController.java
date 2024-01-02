@@ -1,12 +1,14 @@
 package com.sos.trellosos.domain.column.controller;
 
+import com.sos.trellosos.domain.column.dto.ChangeColumnSequenceRequestDto;
 import com.sos.trellosos.domain.column.dto.ColumnRequestDto;
 import com.sos.trellosos.domain.column.dto.ColumnResponseDto;
-//import com.sos.trellosos.domain.column.dto.SequenceChangeRequestDto;
 import com.sos.trellosos.domain.column.service.ColumnService;
 import com.sos.trellosos.global.dto.CommonResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,10 +40,11 @@ public class ColumnController {
     }
 
     //컬럼 번호 이동
-//    @PutMapping("/columns/{columnId}")
-//    public ColumnResponseDto updateColumnSequence(
-//            @PathVariable Long columnId,
-//            @RequestBody SequenceChangeRequestDto request){
-//        return columnService.updateColumnSequence(columnId, request);
-//    }
+    @PatchMapping("/columns/{columnId}/columnSequence")
+    public List<ColumnResponseDto> changeSequence(
+            @PathVariable Long columnId,
+            @RequestBody ChangeColumnSequenceRequestDto changeColumnSequenceRequestDto){
+
+        return columnService.changeColumnSequence(columnId, changeColumnSequenceRequestDto);
+    }
 }

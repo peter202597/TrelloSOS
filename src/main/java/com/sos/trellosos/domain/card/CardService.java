@@ -10,6 +10,7 @@ import com.sos.trellosos.domain.worker.WorkerRepository;
 import com.sos.trellosos.global.exception.CustomException;
 import com.sos.trellosos.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,15 +27,16 @@ public class CardService {
   private final UserRepository userRepository;
   private final WorkerRepository workerRepository;
 
+  public CardResponseDto createCard(CreateCardRequestDto requestDto) {
 
-  public CardResponseDto createCard(CardRequestDto requestDto) {
-    Columns column = columnRepository.findById(requestDto.getColumnId()).orElseThrow(
-        () -> new CustomException(ErrorCode.COLUMN_NOT_FOUND)
-    );
+    Columns columns = findColumn(requestDto.getColumnId());
+
+    Integer count = cardRepository.countByColumnsId(requestDto.getColumnId()) + 1;
 
     Card card = new Card(requestDto);
 
-    card.setColumns(column);
+    card.setColumns(columns);
+    card.setSequence(count);
 
     Card savedCard = cardRepository.save(card);
 
@@ -59,22 +61,13 @@ public class CardService {
   }
 
   @Transactional
-  public CardResponseDto updateCard(Long cardId, CardRequestDto requestDto) {
+  public CardResponseDto updateCard(Long cardId, UpdateCardRequestDto requestDto) {
     Card card = findCard(cardId);
-
-    User user = userRepository.findById(requestDto.getUserId()).orElseThrow(
-        () -> new CustomException(ErrorCode.USER_NOT_FOUND)
-    );
 
     card.update(requestDto);
 
-    Worker worker = card.joinUser(user);
+    return new CardResponseDto(card);
 
-    CardResponseDto responseDto = new CardResponseDto(card);
-
-    responseDto.setWorker(worker.getUser().getUsername());
-
-    return responseDto;
   }
 
   @Transactional
@@ -85,11 +78,113 @@ public class CardService {
     cardRepository.delete(card);
   }
 
-  private Card findCard(Long cardId) {
-    Card card = cardRepository.findById(cardId).orElseThrow(
-        () -> new CustomException(ErrorCode.CARD_NOT_FOUND)
-    );
-    return card;
+  @Transactional
+  public List<CardResponseDto> changeSequence(Long cardId, ChangeSequenceRequestDto requestDto) {
+    Integer newSequence = requestDto.getNewSequence();
+
+    Card card = findCard(cardId);
+    Integer currentSequence = card.getSequence();
+    Long columnId = card.getColumns().getId();
+
+    if (currentSequence < newSequence) {
+      cardRepository.pullSequence(currentSequence + 1, newSequence, columnId);
+    } else {
+      cardRepository.pushSequence(newSequence, currentSequence - 1, columnId);
+    }
+    card.setSequence(newSequence);
+
+    return cardRepository.findAllByOrderBySequenceAsc().stream().map(CardResponseDto::new)
+        .toList();
   }
 
+  @Transactional
+  public CardResponseDto changeColumn(Long cardId, ChangeColumnRequestDto requestDto) {
+    Card card = findCard(cardId);
+
+    Columns newColumns = findColumn(requestDto.getNewColumnsId());
+
+    Integer currentSequence = card.getSequence();
+    Integer newSequence = requestDto.getNewSequence();
+
+    Long oldColumnsId = card.getColumns().getId();
+    Long newColumnsId = newColumns.getId();
+
+    Integer lastSequenceInOldColumns = cardRepository.countByColumnsId(oldColumnsId);
+
+    card.setColumns(newColumns);
+    card.setSequence(null);
+
+    Integer lastSequenceInNewColumns = cardRepository.countByColumnsId(newColumnsId);
+
+    cardRepository.pullSequence(currentSequence + 1, lastSequenceInOldColumns, oldColumnsId);
+
+    cardRepository.pushSequence(newSequence, lastSequenceInNewColumns, newColumnsId);
+
+    card.setSequence(newSequence);
+
+    return new CardResponseDto(card);
+
+  }
+
+  @Transactional
+  public void deleteAll() {
+    cardRepository.deleteAll();
+  }
+
+  @Transactional
+  public CardResponseDto setDueDate(Long cardId, DueDateRequestDto requestDto) {
+
+    Card card = findCard(cardId);
+
+    card.setDueDate(requestDto.getDueDate());
+
+    return new CardResponseDto(card);
+
+  }
+
+
+  @Transactional
+  public CardResponseDto allocateWorker(Long cardId, WorkerRequestDto requestDto) {
+    Card card = findCard(cardId);
+
+    User user = findUser(requestDto.getUserId());
+
+    card.allocateWorker(user);
+
+    return new CardResponseDto(card);
+  }
+
+  @Transactional
+  public CardResponseDto detachWorker(Long cardId, WorkerRequestDto requestDto) {
+    Card card = findCard(cardId);
+
+    Worker worker = workerRepository.findByUserIdAndCardId(requestDto.getUserId(), cardId)
+        .orElseThrow(
+            () -> new CustomException(ErrorCode.WORKER_NOT_FOUND)
+        );
+
+    card.detachWorker(worker);
+
+    return new CardResponseDto(card);
+
+  }
+
+
+  private Card findCard(Long cardId) {
+    return cardRepository.findById(cardId).orElseThrow(
+        () -> new CustomException(ErrorCode.CARD_NOT_FOUND)
+    );
+  }
+
+  private User findUser(Long userId) {
+    return userRepository.findById(userId).orElseThrow(
+        () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+    );
+  }
+
+  private Columns findColumn(Long columnId) {
+    return columnRepository.findById(columnId).orElseThrow(
+        () -> new CustomException(ErrorCode.COLUMN_NOT_FOUND)
+    );
+  }
 }
