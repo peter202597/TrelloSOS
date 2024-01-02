@@ -1,6 +1,7 @@
 package com.sos.trellosos.domain.card;
 
 
+import com.sos.trellosos.domain.board.entity.BoardUser;
 import com.sos.trellosos.domain.column.entity.Columns;
 import com.sos.trellosos.domain.column.repository.ColumnRepository;
 import com.sos.trellosos.domain.user.User;
@@ -149,7 +150,11 @@ public class CardService {
 
     User user = findUser(requestDto.getUserId());
 
-    card.allocateWorker(user);
+    for (BoardUser boardUser : card.getColumns().getBoard().getBoardUsers()) {
+      if (boardUser.getUser().getId().equals(user.getId())) {
+        card.allocateWorker(user);
+      }
+    }
 
     return new CardResponseDto(card);
   }
