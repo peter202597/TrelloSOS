@@ -18,7 +18,7 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
 
-    @PostMapping("/create")
+    @PostMapping("")
     public CommonResponseDto createBoard(
             @RequestBody BoardRequestDto boardRequestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
