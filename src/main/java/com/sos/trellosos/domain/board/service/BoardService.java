@@ -55,7 +55,7 @@ public class BoardService {
     public BoardResponseDto getBoard(Long boardId, UserDetailsImpl userDetails) {
         userCheck(userDetails);
         BoardUser boardUser = boardUserRepository.findByUserIdAndBoardId(userDetails.getUser().getId(),boardId);
-        return new BoardResponseDto(boardUser.getBoard());
+        return new BoardResponseDto(boardUser.getBoard(),boardUser.getBoard().getColumns());
     }
 
     //보드 수정
@@ -63,13 +63,18 @@ public class BoardService {
     public BoardResponseDto updateBoard(Long boardId, BoardRequestDto boardRequestDto, UserDetailsImpl userDetails) {
         List<BoardUser> boardUserList = boardUserRepository.findByBoardId(boardId);
         Board board = boardCheck(boardId);
-
+        boolean flag = false;
+        
         for (BoardUser boardUser : boardUserList) {
+            System.out.println("boardUser.getUser().getId() = " + boardUser.getUser().getId());
             if (boardUser.getUser().getId().equals(userDetails.getUser().getId())) {
-                board.updateBoard(boardRequestDto);
-                return new BoardResponseDto(board);
+                flag=true;
             }
-            return new BoardResponseDto(board);
+        }
+        if(flag){
+            board.updateBoard(boardRequestDto);
+        }else{
+            throw new CustomException(ErrorCode.USER_NOT_INVITED);
         }
         return new BoardResponseDto(board);
     }
@@ -80,15 +85,18 @@ public class BoardService {
         List<BoardUser> boardUserList = boardUserRepository.findByBoardId(boardId);
         userCheck(userDetails);
         boardCheck(boardId);
-
+        boolean flag = false;
         for (BoardUser boardUser : boardUserList) {
+            System.out.println("boardUser.getUser().getId() = " + boardUser.getUser().getId());
             if (boardUser.getUser().getId().equals(userDetails.getUser().getId())) {
-                boardRepository.deleteById(boardId);
-                return new CommonResponseDto(boardId + "번 보드 삭제 성공", HttpStatus.OK.value());
+                flag=true;
             }
+        }
+        if(flag){
+            return new CommonResponseDto(boardId + "번 보드 삭제 성공", HttpStatus.OK.value());
+        }else{
             return new CommonResponseDto("보드 사용자로 등록되어 있지 않습니다.", HttpStatus.BAD_REQUEST.value());
         }
-        return new CommonResponseDto("보드 사용자로 등록되어 있지 않습니다.", HttpStatus.BAD_REQUEST.value());
     }
 
     //유저 등록
