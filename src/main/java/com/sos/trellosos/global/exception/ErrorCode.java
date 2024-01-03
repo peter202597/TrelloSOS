@@ -12,6 +12,7 @@ public enum ErrorCode {
   COLUMN_NOT_FOUND(HttpStatus.NOT_FOUND, "컬럼이 존재하지 않습니다"),
   CARD_NOT_FOUND(HttpStatus.NOT_FOUND, "카드가 존재하지 않습니다."),
   USER_NOT_MATCHES(HttpStatus.UNAUTHORIZED, "board 생성자만 수정/삭제할 수 있습니다."),
+  USER_NOT_INVITED(HttpStatus.UNAUTHORIZED, "board에 초대받은 사용자만 수정/삭제할 수 있습니다."),
   USER_NOT_MATCHES2(HttpStatus.UNAUTHORIZED, "아이디가 일치하지 않습니다."),
   PASSWORD_NOT_MATCHES(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
   ALREADY_EXIST_USER(HttpStatus.CONFLICT, "중복된 닉네임 입니다."),
