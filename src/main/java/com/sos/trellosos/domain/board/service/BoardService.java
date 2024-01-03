@@ -55,7 +55,7 @@ public class BoardService {
     public BoardResponseDto getBoard(Long boardId, UserDetailsImpl userDetails) {
         userCheck(userDetails);
         BoardUser boardUser = boardUserRepository.findByUserIdAndBoardId(userDetails.getUser().getId(),boardId);
-        return new BoardResponseDto(boardUser.getBoard());
+        return new BoardResponseDto(boardUser.getBoard(),boardUser.getBoard().getColumns());
     }
 
     //보드 수정
